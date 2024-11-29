@@ -1,10 +1,12 @@
 // api/axiosClient.js
 import axios from "axios";
 import queryString from "query-string";
+import { jwtDecode } from "jwt-decode";
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
-  baseURL: "https://njs301x-asm-3-back-end.onrender.com",
+  // baseURL: "https://njs301x-asm-3-back-end.onrender.com",
+  baseURL: "http://localhost:5000",
   headers: {
     "content-type": "application/json",
   },
@@ -12,10 +14,17 @@ const axiosClient = axios.create({
 });
 axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
-
   const token = localStorage.getItem("token");
 
   if (token) {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+
+    if (decoded.exp < currentTime) {
+      localStorage.removeItem("token");
+      // return Promise.reject("Token expired");
+    }
+
     config.headers["Authorization"] = "Bearer " + token;
   }
 

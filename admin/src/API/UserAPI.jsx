@@ -19,9 +19,13 @@ const UserAPI = {
     const url = `/users/login/${query}`;
     return axiosClient.post(url);
   },
-  putUpdateUser: (query) => {
-    const url = `/users/update/${query}`;
-    return axiosClient.put(url);
+  putUpdateUser: (data) => {
+    const url = `/users/update`;
+    return axiosClient.put(url, data);
+  },
+  deleteUser: (query) => {
+    const url = `/users/delete/${query}`;
+    return axiosClient.delete(url);
   },
 };
 

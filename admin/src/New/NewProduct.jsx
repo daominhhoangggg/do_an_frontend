@@ -22,29 +22,29 @@ const NewProduct = () => {
                 placeholder="Enter Category"
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label>Short Description</label>
               <textarea
-                class="form-control"
+                className="form-control"
                 rows="3"
                 placeholder="Enter Short Description"
               ></textarea>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label>Long Description</label>
               <textarea
-                class="form-control"
+                className="form-control"
                 rows="6"
                 placeholder="Enter Long Description"
               ></textarea>
             </div>
-            <div class="form-group">
-              <label for="exampleFormControlFile1">
+            <div className="form-group">
+              <label htmlFor="exampleFormControlFile1">
                 Upload image (5 images)
               </label>
               <input
                 type="file"
-                class="form-control-file"
+                className="form-control-file"
                 id="exampleFormControlFile1"
                 multiple
               />

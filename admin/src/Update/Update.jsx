@@ -60,44 +60,56 @@ function Register(props) {
     setEmail(e.target.value);
   };
 
-  const onPwChange = (e) => {
+  useEffect(() => {
     if (password !== "" && confirmPw !== password) setPwError(true);
     else setPwError(false);
-
-    setConfirm(e.target.value);
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    console.log("Full name: " + fullname);
-    console.log("Phone: " + phone);
-    console.log("Email: " + email);
-    console.log("Role: " + role);
-  };
+  }, [password, confirmPw]);
 
   // const onSubmit = (e) => {
   //   e.preventDefault();
-  //   if (!fullname || !phone || !email) {
-  //     setError(true);
-  //     return;
-  //   } else {
-  //     setError(false);
-  //     if (!validateEmail(email)) {
-  //       setEmailRegex(true);
-  //       return;
-  //     } else {
-  //       setEmailRegex(false);
-  //       if (!password && confirmPw !== password) {
-  //         setPwError(true);
-  //         return;
-  //       } else {
-  //         setPwError(false);
-
-  //         const fetchUpdate = async () => {};
-  //       }
-  //     }
-  //   }
+  //   console.log("Full name: " + fullname);
+  //   console.log("Phone: " + phone);
+  //   console.log("Email: " + email);
+  //   console.log("Role: " + role);
   // };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!fullname || !phone || !email) {
+      setNameError(true); //
+      return;
+    } else {
+      setNameError(false); //
+      if (!validateEmail(email)) {
+        setEmailRegex(true);
+        return;
+      } else {
+        setEmailRegex(false);
+        if (!password && confirmPw !== password) {
+          setPwError(true);
+          return;
+        } else {
+          setPwError(false);
+
+          const fetchUpdate = async () => {
+            const data = {
+              idUser: idUser,
+              fullname: fullname,
+              phone: phone,
+              email: email,
+              password: password,
+              role: role,
+            };
+            const response = await UserAPI.putUpdateUser(data);
+
+            // console.log(response);
+          };
+
+          fetchUpdate();
+        }
+      }
+    }
+  };
 
   function validateEmail(email) {
     const re =
@@ -169,7 +181,7 @@ function Register(props) {
                 className="form-control"
                 value={confirmPw}
                 placeholder="Confirm Your Password"
-                onChange={onPwChange}
+                onChange={(e) => setConfirm(e.target.value)}
               />
               {errorPw && (
                 <span className="text-danger">

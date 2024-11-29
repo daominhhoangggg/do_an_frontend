@@ -6,7 +6,7 @@ import { deleteSession } from "../Redux/Action/ActionSession";
 function LoginLink(props) {
   const dispatch = useDispatch();
 
-  const onRedirect = async () => {
+  const onRedirect = () => {
     localStorage.clear();
 
     const action = deleteSession("");

@@ -8,13 +8,26 @@ function Users(props) {
     const fetchData = async () => {
       const response = await UserAPI.getAllData();
       console.log(response);
-      console.log("Hello");
 
       setUsers(response);
     };
 
     fetchData();
   }, []);
+
+  const handleDelete = async (idUser) => {
+    try {
+      const response = await UserAPI.deleteUser(idUser);
+
+      if (response.status === 200) {
+        setUsers(users.filter((user) => user._id !== idUser));
+      } else {
+        throw new Error("Failed to delete user.");
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -88,11 +101,13 @@ function Users(props) {
                               </a>
                               &nbsp;
                               <a
+                                href="/users"
                                 style={{
                                   cursor: "pointer",
                                   color: "white",
                                 }}
                                 className="btn btn-danger"
+                                onClick={(e) => handleDelete(e, value._id)}
                               >
                                 Delete
                               </a>

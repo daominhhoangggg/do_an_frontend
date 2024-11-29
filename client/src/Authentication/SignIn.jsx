@@ -73,8 +73,8 @@ function SignIn(props) {
             try {
               const response = await UserAPI.postLogin(query);
 
-              setErrorEmail(false);
-              setErrorPassword(false);
+              // setErrorEmail(false);
+              // setErrorPassword(false);
 
               localStorage.setItem("id_user", response.user._id);
 
