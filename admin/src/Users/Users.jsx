@@ -4,26 +4,20 @@ import UserAPI from "../API/UserAPI";
 function Users(props) {
   const [users, setUsers] = useState([]);
 
+  const fetchData = async () => {
+    const response = await UserAPI.getAllData();
+    console.log(response);
+
+    setUsers(response);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await UserAPI.getAllData();
-      console.log(response);
-
-      setUsers(response);
-    };
-
     fetchData();
   }, []);
 
   const handleDelete = async (idUser) => {
     try {
-      const response = await UserAPI.deleteUser(idUser);
-
-      if (response.status === 200) {
-        setUsers(users.filter((user) => user._id !== idUser));
-      } else {
-        throw new Error("Failed to delete user.");
-      }
+      await UserAPI.deleteUser(idUser);
+      fetchData();
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -107,7 +101,10 @@ function Users(props) {
                                   color: "white",
                                 }}
                                 className="btn btn-danger"
-                                onClick={(e) => handleDelete(e, value._id)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleDelete(value._id);
+                                }}
                               >
                                 Delete
                               </a>

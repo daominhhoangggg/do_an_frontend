@@ -12,16 +12,6 @@ const Login = () => {
   const { loading, error, dispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await UserAPI.getAllData();
-
-  //     setUser(response);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const handleSubmit = async () => {
     const fetchLogin = async () => {
       const query = "?" + `email=${email}&password=${password}`;

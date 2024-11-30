@@ -65,14 +65,6 @@ function Register(props) {
     else setPwError(false);
   }, [password, confirmPw]);
 
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Full name: " + fullname);
-  //   console.log("Phone: " + phone);
-  //   console.log("Email: " + email);
-  //   console.log("Role: " + role);
-  // };
-
   const onSubmit = (e) => {
     e.preventDefault();
     if (!fullname || !phone || !email) {
@@ -100,12 +92,11 @@ function Register(props) {
               password: password,
               role: role,
             };
-            const response = await UserAPI.putUpdateUser(data);
-
-            // console.log(response);
+            await UserAPI.putUpdateUser(data);
           };
 
           fetchUpdate();
+          window.location.href = "/users";
         }
       }
     }
