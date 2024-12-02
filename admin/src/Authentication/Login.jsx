@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
 import { AuthContext } from "../Context/AuthContext";
 
-import "./Login.css";
+import "./Auth.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,33 +42,6 @@ const Login = () => {
     };
 
     fetchLogin();
-
-    // const findUser = user.find((value) => {
-    //   return value.email === email;
-    // });
-
-    // if (findUser && findUser.password === password) {
-    //   dispatch({ type: "LOGIN_SUCCESS", payload: findUser });
-    //   // navigate("/")
-    // } else {
-    //   alert("Email or password wrong!");
-    // }
-
-    // if (findUser.password !== password) {
-    // 	setErrorPassword(true);
-    // 	return;
-    // } else {
-    // 	setErrorPassword(false);
-
-    // 	localStorage.setItem('id_user', findUser._id);
-
-    // 	localStorage.setItem('name_user', findUser.fullname);
-
-    // 	const action = addSession(localStorage.getItem('id_user'));
-    // 	dispatch(action);
-
-    // 	setCheckPush(true);
-    // }
   };
 
   return (

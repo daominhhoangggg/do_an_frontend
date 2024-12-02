@@ -11,9 +11,9 @@ const UserAPI = {
     return axiosClient.get(url);
   },
 
-  postSignUp: (query) => {
-    const url = `/users/signup/${query}`;
-    return axiosClient.post(url);
+  postSignUp: (data) => {
+    const url = `/users/signup`;
+    return axiosClient.post(url, data);
   },
   postLogin: (query) => {
     const url = `/users/login/${query}`;

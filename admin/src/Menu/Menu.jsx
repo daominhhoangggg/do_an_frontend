@@ -22,7 +22,7 @@ function Menu(props) {
             </li>
             <li className="sidebar-item">
               <a className="sidebar-link sidebar-link" href="/new">
-                <i data-feather="settings" className="feather-icon"></i>
+                <i data-feather="plus-square" className="feather-icon"></i>
                 <span className="hide-menu">New Product</span>
               </a>
             </li>
@@ -33,11 +33,7 @@ function Menu(props) {
               </a>
             </li>
             <li className="sidebar-item">
-              <a
-                className="sidebar-link has-arrow"
-                href="#"
-                aria-expanded="false"
-              >
+              <a className="sidebar-link has-arrow" aria-expanded="false">
                 <i data-feather="grid" className="feather-icon"></i>
                 <span className="hide-menu">Tables</span>
               </a>
@@ -65,10 +61,8 @@ function Menu(props) {
 
             <li className="list-divider"></li>
             {/*Uncomment từ đây */}
-            {user ? (
-              ""
-            ) : (
-              <div>
+            {!user && (
+              <ul id="sidebarnav">
                 <li className="nav-small-cap">
                   <span className="hide-menu">Authentication</span>
                 </li>
@@ -85,14 +79,14 @@ function Menu(props) {
                 <li className="sidebar-item">
                   <a
                     className="sidebar-link sidebar-link"
-                    href="/register"
+                    href="/signup"
                     aria-expanded="false"
                   >
-                    <i data-feather="lock" className="feather-icon"></i>
-                    <span className="hide-menu">Register</span>
+                    <i data-feather="user-plus" className="feather-icon"></i>
+                    <span className="hide-menu">Signup</span>
                   </a>
                 </li>
-              </div>
+              </ul>
             )}
             {/* Tới đây thôi */}
           </ul>

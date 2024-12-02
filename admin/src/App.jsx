@@ -7,10 +7,11 @@ import Home from "./Home/Home";
 import Menu from "./Menu/Menu";
 import Products from "./Products/Products";
 import Users from "./Users/Users";
-import Login from "./Login/Login";
+import Login from "./Authentication/Login";
 import NewProduct from "./New/NewProduct";
 import Update from "./Update/Update";
 import { AuthContextProvider } from "./Context/AuthContext";
+import Signup from "./Authentication/Signup";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
               <Route path="/products" component={Products} />
               <Route path="/history" component={History} />
               <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
               <Route path="/new" component={NewProduct} />
             </Switch>
           </div>
