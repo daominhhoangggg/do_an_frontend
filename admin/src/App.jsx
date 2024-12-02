@@ -13,6 +13,8 @@ import Update from "./Update/Update";
 import { AuthContextProvider } from "./Context/AuthContext";
 import Signup from "./Authentication/Signup";
 
+import "./css/custom.css";
+
 function App() {
   return (
     <div className="App">

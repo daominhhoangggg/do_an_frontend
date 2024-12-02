@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import alertify from "alertifyjs";
 import UserAPI from "../API/UserAPI";
 import { AuthContext } from "../Context/AuthContext";
 
@@ -9,8 +9,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { user } = useContext(AuthContext);
   const { loading, error, dispatch } = useContext(AuthContext);
-  const history = useHistory();
 
   const handleSubmit = async () => {
     const fetchLogin = async () => {
@@ -24,16 +24,18 @@ const Login = () => {
 
         dispatch({ type: "LOGIN_SUCCESS", payload: response });
 
-        history.push("/");
-        window.location.reload();
+        window.location.href = "/";
       } catch (error) {
-        if (error.response.data.error === email) {
-          console.log("Email Error.");
+        if (error.response.data.error === "email") {
+          alertify.set("notifier", "position", "bottom-left");
+          alertify.error(error.response.data.message);
           dispatch({ type: "LOGIN_FAILURE", payload: "Wrong email." });
           return;
         } else {
-          if (error.response.data.error === password) {
-            console.log("Password Error");
+          if (error.response.data.error === "password") {
+            alertify.set("notifier", "position", "bottom-left");
+            alertify.error(error.response.data.message);
+            console.log(error.response.data.message);
             dispatch({ type: "LOGIN_FAILURE", payload: "Wrong password." });
             return;
           }
@@ -50,7 +52,7 @@ const Login = () => {
         <div className="row">
           <div className="login">
             <div className="heading">
-              <h2>Sign in</h2>
+              <h2>Log in</h2>
               <form action="#">
                 <div className="input-group input-group-lg">
                   <span className="input-group-addon">

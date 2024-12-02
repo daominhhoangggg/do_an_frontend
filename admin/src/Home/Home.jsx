@@ -37,9 +37,11 @@ function Home(props) {
   };
 
   useEffect(() => {
-    fetchHistory();
-    fetchClients();
-  }, []);
+    if (user) {
+      fetchHistory();
+      fetchClients();
+    }
+  }, [user]);
 
   return (
     <div className="page-wrapper">
