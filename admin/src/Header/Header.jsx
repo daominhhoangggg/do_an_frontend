@@ -70,8 +70,8 @@ function Header(props) {
         </div>
         <div className="navbar-collapse collapse" id="navbarSupportedContent">
           <ul className="navbar-nav float-left mr-auto ml-3 pl-1">
-            <li className="nav-item dropdown">
-              {/* <a
+            {/* <li className="nav-item dropdown">
+              <a
 								className='nav-link dropdown-toggle'
 								href='#'
 								id='navbarDropdown'
@@ -80,7 +80,7 @@ function Header(props) {
 								aria-haspopup='true'
 								aria-expanded='false'>
 								<i data-feather='settings' className='svg-icon'></i>
-							</a> */}
+							</a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="#">
                   Action
@@ -93,7 +93,7 @@ function Header(props) {
                   Something else here
                 </a>
               </div>
-            </li>
+            </li> */}
           </ul>
           {user ? (
             <ul className="navbar-nav float-right">

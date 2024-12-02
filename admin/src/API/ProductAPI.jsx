@@ -21,9 +21,14 @@ const ProductAPI = {
     return axiosClient.get(url);
   },
 
-  postNewProduct: (query) => {
-    const url = `/products/add${query}`;
-    return axiosClient.post(url);
+  postNewProduct: (data) => {
+    const url = `/products/add`;
+    return axiosClient.post(url, data);
+  },
+
+  deleteProduct: (query) => {
+    const url = `/products/delete/${query}`;
+    return axiosClient.delete(url);
   },
 };
 

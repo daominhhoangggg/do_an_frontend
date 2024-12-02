@@ -16,7 +16,7 @@ function Register(props) {
   const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
 
   const idUser = useParams().userId;
 
@@ -25,7 +25,7 @@ function Register(props) {
       if (idUser) {
         const response = await UserAPI.getDetailData(idUser);
 
-        setUser(response);
+        // setUser(response);
         setFullName(response.fullname);
         setPhone(response.phone);
         setEmail(response.email);

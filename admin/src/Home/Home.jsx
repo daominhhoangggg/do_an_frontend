@@ -4,23 +4,41 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import convertMoney from "../convertMoney";
 import { AuthContext } from "../Context/AuthContext";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import UserAPI from "../API/UserAPI";
 
 Home.propTypes = {};
 
 function Home(props) {
   const [history, setHistory] = useState([]);
+  const [totalClients, setTotalClients] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   const { user } = useContext(AuthContext);
 
-  // const navigate = useHistory();
-
   // useEffect(() => {
-  //   if (!user) navigate.push("/login");
+  //   window.location.href = "/login";
   // });
 
-  useEffect(async () => {
+  const fetchHistory = async () => {
     const response = await HistoryAPI.getAll();
     setHistory(response);
+    setTotalOrders(response.length);
+    if (response.length > 0) {
+      const rev = response.reduce((acc, order) => {
+        return acc + parseInt(order.total);
+      }, 0);
+      setRevenue(rev);
+    }
+  };
+
+  const fetchClients = async () => {
+    const response = await UserAPI.getAllData();
+    setTotalClients(response.length);
+  };
+
+  useEffect(() => {
+    fetchHistory();
+    fetchClients();
   }, []);
 
   return (
@@ -50,7 +68,9 @@ function Home(props) {
               <div className="d-flex d-lg-flex d-md-block align-items-center">
                 <div>
                   <div className="d-inline-flex align-items-center">
-                    <h2 className="text-dark mb-1 font-weight-medium">2</h2>
+                    <h2 className="text-dark mb-1 font-weight-medium">
+                      {totalClients}
+                    </h2>
                   </div>
                   <h6 className="text-muted font-weight-normal mb-0 w-100 text-truncate">
                     Clients
@@ -69,7 +89,7 @@ function Home(props) {
               <div className="d-flex d-lg-flex d-md-block align-items-center">
                 <div>
                   <h2 className="text-dark mb-1 w-100 text-truncate font-weight-medium">
-                    {convertMoney(44779000)}
+                    {convertMoney(revenue)}
                     <sup className="set-doller"> VND</sup>
                   </h2>
                   <h6 className="text-muted font-weight-normal mb-0 w-100 text-truncate">
@@ -89,7 +109,9 @@ function Home(props) {
               <div className="d-flex d-lg-flex d-md-block align-items-center">
                 <div>
                   <div className="d-inline-flex align-items-center">
-                    <h2 className="text-dark mb-1 font-weight-medium">2</h2>
+                    <h2 className="text-dark mb-1 font-weight-medium">
+                      {totalOrders}
+                    </h2>
                   </div>
                   <h6 className="text-muted font-weight-normal mb-0 w-100 text-truncate">
                     New Order
