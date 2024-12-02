@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
+import alertify from "alertifyjs";
 import UserAPI from "../API/UserAPI";
 import "./Auth.css";
 import queryString from "query-string";
@@ -14,6 +15,7 @@ function SignUp(props) {
   const [phone, setPhone] = useState("");
 
   const [errorEmail, setEmailError] = useState(false);
+  const [usedEmail, setUsedEmail] = useState(false);
   const [emailRegex, setEmailRegex] = useState(false);
   const [errorPassword, setPasswordError] = useState(false);
   const [errorFullname, setFullnameError] = useState(false);
@@ -95,22 +97,24 @@ function SignUp(props) {
               setPhoneError(true);
               setPasswordError(false);
             } else {
-              console.log("Thanh Cong");
-
               const fetchSignUp = async () => {
-                const params = {
+                const data = {
                   fullname: fullname,
                   email: email,
                   password: password,
                   phone: phone,
                 };
 
-                const query = "?" + queryString.stringify(params);
+                try {
+                  await UserAPI.postSignUp(data);
 
-                const response = await UserAPI.postSignUp(query);
-                console.log(response);
-
-                setSuccess(true);
+                  setSuccess(true);
+                  console.log("Thanh Cong");
+                } catch (error) {
+                  if (error.response.data.error === "email") {
+                    setUsedEmail(true);
+                  }
+                }
               };
 
               fetchSignUp();
@@ -154,17 +158,22 @@ function SignUp(props) {
               </span>
             )}
             {errorEmail && (
-              <span className="text-danger">* Please Check Your Email!</span>
+              <span className="text-danger">* Please Check Your Email! *</span>
+            )}
+            {usedEmail && (
+              <span className="text-danger">* Email already been used! *</span>
             )}
             {emailRegex && (
-              <span className="text-danger">* Incorrect Email Format</span>
+              <span className="text-danger">* Incorrect Email Format *</span>
             )}
             {errorPassword && (
-              <span className="text-danger">* Please Check Your Password!</span>
+              <span className="text-danger">
+                * Please Check Your Password! *
+              </span>
             )}
             {errorPhone && (
               <span className="text-danger">
-                * Please Check Your Phone Number!
+                * Please Check Your Phone Number! *
               </span>
             )}
           </div>

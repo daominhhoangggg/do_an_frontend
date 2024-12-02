@@ -147,13 +147,15 @@ function SignIn(props) {
 
           <div className="d-flex justify-content-center pb-5">
             {emailRegex && (
-              <span className="text-danger">* Incorrect Email Format</span>
+              <span className="text-danger">* Incorrect Email Format *</span>
             )}
             {errorEmail && (
-              <span className="text-danger">* Please Check Your Email</span>
+              <span className="text-danger">* Please Check Your Email *</span>
             )}
             {errorPassword && (
-              <span className="text-danger">* Please Check Your Password</span>
+              <span className="text-danger">
+                * Please Check Your Password *
+              </span>
             )}
           </div>
 
