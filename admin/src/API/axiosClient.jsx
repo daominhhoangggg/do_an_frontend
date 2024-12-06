@@ -23,40 +23,13 @@ const isTokenExpired = (token) => {
   }
 };
 
-// const refreshAccessToken = async () => {
-//   try {
-//     const refreshToken = localStorage.getItem("refreshToken");
-//     if (!refreshToken) throw new Error("NO refresh token available");
-
-//     const response = await axios.post("http://localhost:5000/auth/refresh", {
-//       token: refreshToken,
-//     });
-
-//     const { accessToken, refreshToken: newRefreshToken } = response.data;
-//     localStorage.setItem("token", accessToken);
-//     localStorage.setItem("refreshToken", newRefreshToken);
-
-//     return accessToken;
-//   } catch (error) {
-//     console.error("Failed to refresh token", error);
-//     throw error;
-//   }
-// };
-
 axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
-  let token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   if (isTokenExpired(token)) {
     localStorage.removeItem("token");
-    // try {
-    //   token = await refreshAccessToken();
-    // } catch (error) {
-    //   console.error("Token refresh failed. Logging out...");
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("refreshToken");
-    //   throw error;
-    // }
+    console.log("Token Expired.");
   }
 
   config.headers["Authorization"] = "Bearer " + token;
@@ -67,6 +40,7 @@ axiosClient.interceptors.request.use(async (config) => {
 
   return config;
 });
+
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {

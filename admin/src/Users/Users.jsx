@@ -12,7 +12,7 @@ function Users(props) {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
   const handleDelete = async (idUser) => {
     try {
@@ -95,7 +95,6 @@ function Users(props) {
                               </a>
                               &nbsp;
                               <a
-                                href="/users"
                                 style={{
                                   cursor: "pointer",
                                   color: "white",

@@ -9,7 +9,7 @@ import Products from "./Products/Products";
 import Users from "./Users/Users";
 import Login from "./Authentication/Login";
 import NewProduct from "./New/NewProduct";
-import Update from "./Update/Update";
+import Update from "./Update/UpdateUser";
 import { AuthContextProvider } from "./Context/AuthContext";
 import Signup from "./Authentication/Signup";
 

@@ -3,9 +3,11 @@ import queryString from "query-string";
 import ProductAPI from "../API/ProductAPI";
 import Pagination from "./Component/Pagination";
 import convertMoney from "../convertMoney";
+import alertify from "alertifyjs";
 
 function Products(props) {
   const [products, setProducts] = useState([]);
+  const [totalResult, setTotalResult] = useState(null);
 
   const [pagination, setPagination] = useState({
     page: "1",
@@ -13,8 +15,6 @@ function Products(props) {
     search: "",
     category: "all",
   });
-
-  const [search, setSearch] = useState("");
 
   const onChangeText = (e) => {
     const value = e.target.value;
@@ -26,9 +26,6 @@ function Products(props) {
       category: pagination.category,
     });
   };
-
-  //Tổng số trang
-  const [totalPage, setTotalPage] = useState();
 
   //Hàm này dùng để thay đổi state pagination.page
   //Nó sẽ truyền xuống Component con và nhận dữ liệu từ Component con truyền lên
@@ -44,44 +41,45 @@ function Products(props) {
     });
   };
 
-  //Gọi hàm useEffect tìm tổng số sản phẩm để tính tổng số trang
-  //Và nó phụ thuộc và state pagination
-  useEffect(() => {
-    const fetchAllData = async () => {
-      const response = await ProductAPI.getAPI();
-
-      //Tính tổng số trang = tổng số sản phẩm / số lượng sản phẩm 1 trang
-      const totalPage = Math.ceil(
-        parseInt(response.length) / parseInt(pagination.count)
-      );
-
-      setTotalPage(totalPage);
+  const fetchData = async () => {
+    const params = {
+      page: pagination.page,
+      count: pagination.count,
+      search: pagination.search,
+      category: pagination.category,
     };
 
-    fetchAllData();
-  }, [pagination]);
+    const query = queryString.stringify(params);
 
-  //Gọi hàm Pagination
+    const newQuery = "?" + query;
+
+    const response = await ProductAPI.getPagination(newQuery);
+
+    //API trả về số sản phẩm của trang và tổng số sản phẩm
+    setProducts(response.products);
+    setTotalResult(response.totalResult);
+  };
+
+  //Gọi hàm
   useEffect(() => {
-    const fetchData = async () => {
-      const params = {
-        page: pagination.page,
-        count: pagination.count,
-        search: pagination.search,
-        category: pagination.category,
-      };
-
-      const query = queryString.stringify(params);
-
-      const newQuery = "?" + query;
-
-      const response = await ProductAPI.getPagination(newQuery);
-
-      setProducts(response);
-    };
-
     fetchData();
-  }, [pagination]);
+  });
+
+  const handleDelete = async (idProduct) => {
+    try {
+      const response = await ProductAPI.deleteProduct(idProduct);
+      fetchData();
+      if (products.length === 0) {
+        handlerChangePage(parseInt(pagination.page) - 1);
+      }
+      if (response.status === 200) {
+        alertify.set("notifier", "position", "bottom-left");
+        alertify.error("Xóa sản phẩm thành công.");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -171,6 +169,10 @@ function Products(props) {
                                   color: "white",
                                 }}
                                 className="btn btn-danger"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleDelete(value._id);
+                                }}
                               >
                                 Delete
                               </a>
@@ -182,7 +184,7 @@ function Products(props) {
                   <Pagination
                     pagination={pagination}
                     handlerChangePage={handlerChangePage}
-                    totalPage={totalPage}
+                    totalResult={totalResult}
                   />
                 </div>
               </div>

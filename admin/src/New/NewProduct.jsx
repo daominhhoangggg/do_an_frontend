@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductAPI from "../API/ProductAPI";
+import alertify from "alertifyjs";
 
 function NewProduct(props) {
   const [name, setName] = useState("");
@@ -28,12 +29,17 @@ function NewProduct(props) {
       form.append("long_desc", long_desc);
       files.forEach((file) => form.append("files", file));
 
-      await ProductAPI.postNewProduct(form);
+      const response = await ProductAPI.postNewProduct(form);
+
+      alertify.set("notifier", "position", "bottom-left");
+      if (response.status === 200) {
+        alertify.success(response.message);
+      } else {
+        alertify.error(response);
+      }
     } catch (error) {
       console.error("Failed to add product:", error);
     }
-
-    window.location.href = "/products";
   };
 
   return (
