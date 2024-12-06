@@ -1,7 +1,8 @@
 import React, { createContext, useEffect, useReducer } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const INITIAL_STATE = {
-  user: JSON.parse(localStorage.getItem("asm03-user")) || null,
+  user: null,
   loading: false,
   error: null,
 };
@@ -43,8 +44,26 @@ export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(state.user));
-  }, [state.user]);
+    const fetchUserFromToken = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          if (decoded.exp * 1000 < Date.now()) {
+            localStorage.removeItem("token");
+            dispatch({ type: "LOGOUT" });
+          } else {
+            dispatch({ type: "LOGIN_SUCCESS", payload: decoded });
+          }
+        } catch (err) {
+          console.log(err);
+          dispatch({ type: "LOGOUT" });
+        }
+      }
+    };
+
+    fetchUserFromToken();
+  }, []);
 
   return (
     <AuthContext.Provider

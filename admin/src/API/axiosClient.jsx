@@ -12,20 +12,57 @@ const axiosClient = axios.create({
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
+
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.exp * 1000 < Date.now();
+  } catch (error) {
+    return true; // Không decode được => hết hạn
+  }
+};
+
+// const refreshAccessToken = async () => {
+//   try {
+//     const refreshToken = localStorage.getItem("refreshToken");
+//     if (!refreshToken) throw new Error("NO refresh token available");
+
+//     const response = await axios.post("http://localhost:5000/auth/refresh", {
+//       token: refreshToken,
+//     });
+
+//     const { accessToken, refreshToken: newRefreshToken } = response.data;
+//     localStorage.setItem("token", accessToken);
+//     localStorage.setItem("refreshToken", newRefreshToken);
+
+//     return accessToken;
+//   } catch (error) {
+//     console.error("Failed to refresh token", error);
+//     throw error;
+//   }
+// };
+
 axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
 
-  if (token) {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
+  if (isTokenExpired(token)) {
+    localStorage.removeItem("token");
+    // try {
+    //   token = await refreshAccessToken();
+    // } catch (error) {
+    //   console.error("Token refresh failed. Logging out...");
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("refreshToken");
+    //   throw error;
+    // }
+  }
 
-    if (decoded.exp < currentTime) {
-      localStorage.removeItem("token");
-      // return Promise.reject("Token expired");
-    }
+  config.headers["Authorization"] = "Bearer " + token;
 
-    config.headers["Authorization"] = "Bearer " + token;
+  if (config.data instanceof FormData) {
+    delete config.headers["Content-Type"];
   }
 
   return config;

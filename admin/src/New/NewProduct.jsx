@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductAPI from "../API/ProductAPI";
 
 function NewProduct(props) {
@@ -8,33 +8,32 @@ function NewProduct(props) {
   const [short_desc, setShortDesc] = useState("");
   const [long_desc, setLongDesc] = useState("");
   const [files, setFiles] = useState([]);
+  const [preview, setPreview] = useState([]);
 
   const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    const fileArray = Array.from(e.target.files);
+    setFiles(fileArray);
+    const previewArray = fileArray.map((file) => URL.createObjectURL(file));
+    setPreview(previewArray);
   };
 
-  const handleRemove = (index) => {
-    const updatedFiles = files.filter((_, i) => i !== index);
-    setFiles(updatedFiles);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const fetchNewProduct = async () => {
-      const data = {
-        name: name,
-        price: price,
-        category: category,
-        short_desc: short_desc,
-        long_desc: long_desc,
-        files: files,
-      };
-      await ProductAPI.postNewProduct(data);
-    };
+    try {
+      const form = new FormData();
+      form.append("name", name);
+      form.append("price", price);
+      form.append("category", category);
+      form.append("short_desc", short_desc);
+      form.append("long_desc", long_desc);
+      files.forEach((file) => form.append("files", file));
 
-    fetchNewProduct();
-    // window.location.href = "/products";
+      await ProductAPI.postNewProduct(form);
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
+
+    window.location.href = "/products";
   };
 
   return (
@@ -97,7 +96,7 @@ function NewProduct(props) {
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlFile1">
-                Upload image (5 images)
+                Upload image (4 images)
               </label>
               <input
                 type="file"
@@ -107,31 +106,17 @@ function NewProduct(props) {
                 onChange={handleFileChange}
               />
             </div>
-            <div className="mt-3 mb-3">
-              {files.length > 0 && (
-                <ul className="list-group">
-                  {files.map((file, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      {file.name}
-                      <button
-                        type="button"
-                        className="btn btn-sm"
-                        onClick={() => handleRemove(index)}
-                      >
-                        X
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div className="row mt-3 mb-3">
+              {preview.map((url, index) => (
+                <div key={index} className="col-md-3 mb-3">
+                  <img
+                    src={url}
+                    alt={index}
+                    className="img-fluid rounded shadow"
+                    style={{ height: "150px", objectFit: "cover" }}
+                  />
+                </div>
+              ))}
             </div>
             <button type="submit" className="btn btn-primary">
               Submit

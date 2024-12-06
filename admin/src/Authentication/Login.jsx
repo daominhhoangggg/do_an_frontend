@@ -18,11 +18,11 @@ const Login = () => {
       try {
         const response = await UserAPI.postLogin(query);
 
-        localStorage.setItem("asm03-user", JSON.stringify(response.user));
-
         localStorage.setItem("token", response.token);
 
-        dispatch({ type: "LOGIN_SUCCESS", payload: response });
+        // localStorage.setItem("refreshToken", response.refreshToken);
+
+        dispatch({ type: "LOGIN_SUCCESS", payload: response.user });
 
         window.location.href = "/";
       } catch (error) {

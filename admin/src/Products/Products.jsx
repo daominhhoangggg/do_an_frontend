@@ -49,13 +49,11 @@ function Products(props) {
   useEffect(() => {
     const fetchAllData = async () => {
       const response = await ProductAPI.getAPI();
-      console.log(response);
 
       //Tính tổng số trang = tổng số sản phẩm / số lượng sản phẩm 1 trang
       const totalPage = Math.ceil(
         parseInt(response.length) / parseInt(pagination.count)
       );
-      console.log(totalPage);
 
       setTotalPage(totalPage);
     };
@@ -78,7 +76,6 @@ function Products(props) {
       const newQuery = "?" + query;
 
       const response = await ProductAPI.getPagination(newQuery);
-      console.log(response);
 
       setProducts(response);
     };

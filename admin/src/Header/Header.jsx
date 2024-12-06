@@ -16,15 +16,11 @@ function Header(props) {
   const handleLogout = async () => {
     localStorage.clear("user");
 
-    localStorage.clear("asm03-user");
-
     dispatch("LOGOUT");
 
     history.push("/login");
     window.location.reload();
   };
-
-  console.log(user);
 
   return (
     <header className="topbar" data-navbarbg="skin6">
@@ -112,9 +108,9 @@ function Header(props) {
 									width='40'
 								/> */}
                   <span className="ml-2 d-none d-lg-inline-block">
-                    <span>Hello </span>
+                    <span>Hello</span>
                     <span className="text-dark">
-                      {user ? `, ${user.email}` : ""}
+                      {user ? `, ${user.fullname}` : ""}{" "}
                     </span>
                     <i data-feather="chevron-down" className="svg-icon"></i>
                   </span>
