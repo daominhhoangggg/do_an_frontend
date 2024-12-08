@@ -23,7 +23,10 @@ const ProductAPI = {
 
   postNewProduct: (data) => {
     const url = `/products/add`;
-    return axiosClient.post(url, data);
+    const headers = data instanceof FormData
+      ? { "Content-Type": "multipart/form-data" }
+      : { "Content-Type": "application/json" };;
+    return axiosClient.post(url, data, { headers });
   },
 
   deleteProduct: (query) => {

@@ -7,11 +7,12 @@ import { jwtDecode } from "jwt-decode";
 const axiosClient = axios.create({
   // baseURL: "https://njs301x-asm-3-back-end.onrender.com",
   baseURL: "http://localhost:5000",
-  headers: {
-    "content-type": "application/json",
-  },
+  // headers: {
+  //   "content-type": "application/json",
+  // },
   paramsSerializer: (params) => queryString.stringify(params),
 });
+console.log(axiosClient);
 
 const isTokenExpired = (token) => {
   if (!token) return true;
@@ -35,7 +36,10 @@ axiosClient.interceptors.request.use(async (config) => {
   config.headers["Authorization"] = "Bearer " + token;
 
   if (config.data instanceof FormData) {
-    delete config.headers["Content-Type"];
+    // delete config.headers["Content-Type"];
+    config.headers["Content-Type"] = "multipart/form-data";
+  } else {
+    config.headers["Content-Type"] = "application/json";
   }
 
   return config;
