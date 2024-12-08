@@ -40,28 +40,54 @@ const AuthReducer = (state, action) => {
   }
 };
 
+export const getUserFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.exp * 1000 < Date.now()) {
+        localStorage.removeItem("token");
+        return null;
+      } else {
+        return decoded;
+      }
+    } catch (err) {
+      console.log(err);
+      localStorage.removeItem("token");
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
 
   useEffect(() => {
     const fetchUserFromToken = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          if (decoded.exp * 1000 < Date.now()) {
-            localStorage.removeItem("token");
-            dispatch({ type: "LOGOUT" });
-          } else {
-            dispatch({ type: "LOGIN_SUCCESS", payload: decoded });
-          }
-        } catch (err) {
-          console.log(err);
-          dispatch({ type: "LOGOUT" });
-        }
+      // const token = localStorage.getItem("token");
+      // if (token) {
+      //   try {
+      //     const decoded = jwtDecode(token);
+      //     if (decoded.exp * 1000 < Date.now()) {
+      //       localStorage.removeItem("token");
+      //       dispatch({ type: "LOGOUT" });
+      //     } else {
+      //       dispatch({ type: "LOGIN_SUCCESS", payload: decoded });
+      //     }
+      //   } catch (err) {
+      //     console.log(err);
+      //     dispatch({ type: "LOGOUT" });
+      //   }
+      // }
+      const decoded = getUserFromToken();
+      if (decoded) {
+        dispatch({ type: "LOGIN_SUCCESS", payload: decoded });
+      } else {
+        dispatch({ type: "LOGOUT" });
       }
     };
-
     fetchUserFromToken();
   }, []);
 
