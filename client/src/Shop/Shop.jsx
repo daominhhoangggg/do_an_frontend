@@ -181,9 +181,18 @@ function Shop(props) {
                         style={{ width: "100%" }}
                         className="product-view d-block h-100 bg-cover bg-center"
                         src={value.img1}
+                        alt={"image-" + value._i}
                       />
-                      <img className="d-none" href={value.img2} />
-                      <img className="d-none" href={value.img3} />
+                      <img
+                        className="d-none"
+                        href={value.img2}
+                        alt={"image-" + value._i}
+                      />
+                      <img
+                        className="d-none"
+                        href={value.img3}
+                        alt={"image-" + value._i}
+                      />
                     </div>
                     <div className="col-lg-6">
                       {/* Để tắt modal phải có class="close" và data-dissmiss="modal" và aria-label="Close" */}
