@@ -10,12 +10,19 @@ import Users from "./Users/Users";
 import Login from "./Authentication/Login";
 import NewProduct from "./New/NewProduct";
 import Update from "./Update/UpdateUser";
-import { AuthContextProvider } from "./Context/AuthContext";
+import { AuthContextProvider, getUserFromToken } from "./Context/AuthContext";
 import Signup from "./Authentication/Signup";
 
 import "./css/custom.css";
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import PrivateRoute from "./Private/PrivateRouter";
+import Weather from "./Chart/Weather/Weather";
+import TotalRevenue from "./Chart/TotalRevenue/TotalRevenue";
+import DynamicBarChart from "./Chart/Bestseller/Bestseller";
 
 function App() {
+  const user = getUserFromToken();
+
   return (
     <div className="App">
       <AuthContextProvider>
@@ -30,20 +37,32 @@ function App() {
             data-header-position="fixed"
             data-boxed-layout="full"
           >
-            <Header />
-
-            <Menu />
+            {
+              user?.fullname ? (
+                <>
+                  <Header />
+                  <Menu />
+                </>
+              ) : (
+                <Redirect to="/login" /> // Nếu chưa đăng nhập, chuyển hướng đến trang login
+              )
+            }
 
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/chat" component={Chat} />
-              <Route path="/users/:userId" component={Update} />
-              <Route path="/users" component={Users} />
-              <Route path="/products" component={Products} />
-              <Route path="/history" component={History} />
               <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/new" component={NewProduct} />
+              <PrivateRoute exact path="/" component={Home} />
+              {/* <Route path="/chat" component={Chat} /> */}
+              <PrivateRoute path="/users/:userId" component={Update} />
+              <PrivateRoute path="/weather" component={Weather} />
+              <PrivateRoute path="/bestseller" component={DynamicBarChart} />
+              <PrivateRoute path="/total-revenue" component={TotalRevenue} />
+              {/* <PrivateRoute path="/chart" component={} />
+              <PrivateRoute path="/bestseller" component={} /> */}
+              <PrivateRoute path="/users" component={Users} />
+              <PrivateRoute path="/products" component={Products} />
+              <PrivateRoute path="/history" component={History} />
+              <PrivateRoute path="/signup" component={Signup} />
+              <PrivateRoute path="/new" component={NewProduct} />
             </Switch>
           </div>
         </BrowserRouter>

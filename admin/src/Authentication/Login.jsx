@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import alertify from "alertifyjs";
 import UserAPI from "../API/UserAPI";
 import { AuthContext } from "../Context/AuthContext";
@@ -13,8 +13,10 @@ const Login = () => {
   const { loading, error, dispatch } = useContext(AuthContext);
 
   const handleSubmit = async () => {
+
     const fetchLogin = async () => {
       const query = "?" + `email=${email}&password=${password}`;
+
       try {
         const response = await UserAPI.postLogin(query);
 
@@ -25,6 +27,8 @@ const Login = () => {
         dispatch({ type: "LOGIN_SUCCESS", payload: response.user });
 
         window.location.href = "/";
+
+
       } catch (error) {
         if (error.response.data.error === "email") {
           alertify.set("notifier", "position", "bottom-left");
@@ -47,48 +51,48 @@ const Login = () => {
   };
 
   return (
-    <div className="page-wrapper">
-      <div className="page-breadcrumb">
-        <div className="row">
-          <div className="login">
-            <div className="heading">
-              <h2>Log in</h2>
-              <form action="#">
-                <div className="input-group input-group-lg">
-                  <span className="input-group-addon">
-                    <i className="fa fa-user"></i>
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
 
-                <div className="input-group input-group-lg">
-                  <span className="input-group-addon">
-                    <i className="fa fa-lock"></i>
-                  </span>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+    <div className="page-breadcrumb">
+      <div className="row">
+        <div className="login">
+          <div className="heading">
+            <h2>Log in</h2>
+            <form action="#">
+              <div className="input-group input-group-lg">
+                <span className="input-group-addon">
+                  <i className="fa fa-user"></i>
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-                <button type="button" className="float" onClick={handleSubmit}>
-                  Login
-                </button>
-              </form>
-            </div>
+              <div className="input-group input-group-lg">
+                <span className="input-group-addon">
+                  <i className="fa fa-lock"></i>
+                </span>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <button type="button" className="float" onClick={handleSubmit}>
+                Login
+              </button>
+            </form>
           </div>
         </div>
       </div>
     </div>
+
   );
 };
 

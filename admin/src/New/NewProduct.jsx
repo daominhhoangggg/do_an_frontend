@@ -11,6 +11,7 @@ function NewProduct(props) {
   const [files, setFiles] = useState([]);
   const [preview, setPreview] = useState([]);
 
+  // nhiều file
   const handleFileChange = (e) => {
     const fileArray = Array.from(e.target.files);
     setFiles(fileArray);
@@ -20,6 +21,8 @@ function NewProduct(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log({ name, price, category, short_desc, long_desc });
+    // console.log("files:", files[0].name);
     try {
       const form = new FormData();
       form.append("name", name);
@@ -27,9 +30,11 @@ function NewProduct(props) {
       form.append("category", category);
       form.append("short_desc", short_desc);
       form.append("long_desc", long_desc);
-      files.forEach((file) => form.append("files", file));
-
+      files.forEach((file) => {
+        form.append("files", file);
+      });
       const response = await ProductAPI.postNewProduct(form);
+      console.log(response);
 
       alertify.set("notifier", "position", "bottom-left");
       if (response.status === 201) {
@@ -38,7 +43,7 @@ function NewProduct(props) {
         alertify.error(response.message);
       }
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.error("Failed to add product:", error.message);
     }
   };
 
