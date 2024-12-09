@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
-import { AuthContext } from "../Context/AuthContext";
+// import { AuthContext } from "../Context/AuthContext";
 
 import "./Auth.css";
 
@@ -12,14 +12,19 @@ const Signup = () => {
   const [confirm, setConfirm] = useState("");
   const [phone, setPhone] = useState("");
 
-  const { loading, error, dispatch } = useContext(AuthContext);
+  // const { loading, error, dispatch } = useContext(AuthContext);
   const history = useHistory();
 
   const handleSubmit = async () => {
     const fetchSignup = async () => {
-      const query = "?" + `email=${email}&password=${password}`;
+      const data = {
+        fullname,
+        email,
+        password,
+        phone,
+      };
       try {
-        const response = await UserAPI.postSignUp(query);
+        await UserAPI.postSignUp(data);
 
         history.push("/login");
         window.location.reload();
@@ -28,7 +33,7 @@ const Signup = () => {
       }
     };
 
-    // fetchSignup();
+    fetchSignup();
   };
 
   return (

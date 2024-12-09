@@ -32,10 +32,10 @@ function NewProduct(props) {
       const response = await ProductAPI.postNewProduct(form);
 
       alertify.set("notifier", "position", "bottom-left");
-      if (response.status === 200) {
+      if (response.status === 201) {
         alertify.success(response.message);
       } else {
-        alertify.error(response);
+        alertify.error(response.message);
       }
     } catch (error) {
       console.error("Failed to add product:", error);
@@ -102,7 +102,7 @@ function NewProduct(props) {
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlFile1">
-                Upload image (4 images)
+                Upload image (3 images)
               </label>
               <input
                 type="file"

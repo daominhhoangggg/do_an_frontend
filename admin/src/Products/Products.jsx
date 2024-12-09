@@ -3,7 +3,6 @@ import queryString from "query-string";
 import ProductAPI from "../API/ProductAPI";
 import Pagination from "./Component/Pagination";
 import convertMoney from "../convertMoney";
-import alertify from "alertifyjs";
 
 function Products(props) {
   const [products, setProducts] = useState([]);
@@ -67,14 +66,10 @@ function Products(props) {
 
   const handleDelete = async (idProduct) => {
     try {
-      const response = await ProductAPI.deleteProduct(idProduct);
+      await ProductAPI.deleteProduct(idProduct);
       fetchData();
       if (products.length === 0) {
         handlerChangePage(parseInt(pagination.page) - 1);
-      }
-      if (response.status === 200) {
-        alertify.set("notifier", "position", "bottom-left");
-        alertify.error("Xóa sản phẩm thành công.");
       }
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -164,6 +159,7 @@ function Products(props) {
                               </a>
                               &nbsp;
                               <a
+                                href="/products"
                                 style={{
                                   cursor: "pointer",
                                   color: "white",
