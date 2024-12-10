@@ -120,7 +120,7 @@ function NewProduct(props) {
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlFile1">
-                Upload image (3 images)
+                Upload image (4 images)
               </label>
               <input
                 type="file"

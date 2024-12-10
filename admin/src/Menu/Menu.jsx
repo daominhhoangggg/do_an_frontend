@@ -45,7 +45,8 @@ function Menu(props) {
               </a>
             </li>
 
-            <li className="sidebar-item">
+            {/* Không xóa */}
+            {/* <li className="sidebar-item">
               <a
                 className="sidebar-link has-arrow"
                 aria-expanded="false"
@@ -74,7 +75,7 @@ function Menu(props) {
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             <li className="list-divider"></li>
 
@@ -99,34 +100,32 @@ function Menu(props) {
                 <span className="hide-menu">Best Seller</span>
               </a>
             </li>
-          </ul>
-          {/* ) : (
-          <ul id="sidebarnav">
+
+            <li className="list-divider"></li>
+
             <li className="nav-small-cap">
-              <span className="hide-menu">Authentication</span>
+              <span className="hide-menu">Tables</span>
             </li>
             <li className="sidebar-item">
-              <a
-                className="sidebar-link sidebar-link"
-                href="/login"
-                aria-expanded="false"
-              >
-                <i data-feather="lock" className="feather-icon"></i>
-                <span className="hide-menu">Login</span>
+              <a className="sidebar-link sidebar-link" href="/users">
+                <i data-feather="user" className="feather-icon"></i>
+                <span className="hide-menu">Users</span>
               </a>
             </li>
             <li className="sidebar-item">
-              <a
-                className="sidebar-link sidebar-link"
-                href="/signup"
-                aria-expanded="false"
-              >
-                <i data-feather="user-plus" className="feather-icon"></i>
-                <span className="hide-menu">Signup</span>
+              <a className="sidebar-link sidebar-link" href="/products">
+                <i data-feather="package" className="feather-icon"></i>
+                <span className="hide-menu">Products</span>
               </a>
-            </li> */}
-          {/* </ul> */}
-          {/* )} */}
+            </li>
+            <li className="sidebar-item">
+              <a className="sidebar-link sidebar-link" href="/history">
+                <i data-feather="shopping-cart" className="feather-icon"></i>
+                <span className="hide-menu">History</span>
+              </a>
+            </li>
+            {/* End Sidebar  */}
+          </ul>
         </nav>
       </div>
     </aside>

@@ -47,10 +47,16 @@ function Products(props) {
     if (location.state?.success) {
       alertify.set("notifier", "position", "bottom-left");
       alertify.success("Thêm sản phẩm thành công.");
-      history.replace({
-        ...location,
-        state: { ...location.state, success: false },
-      });
+
+      const timeout = setTimeout(() => {
+        history.replace({
+          ...location,
+          state: { ...location.state, success: false },
+        });
+      }, 3000);
+
+      // Cleanup timeout khi component unmount
+      return () => clearTimeout(timeout);
     }
   }, [location, history]);
 
@@ -92,17 +98,22 @@ function Products(props) {
         const response = await ProductAPI.getPagination(newQuery);
 
         //API trả về số sản phẩm của trang và tổng số sản phẩm
-        setProducts(response.products);
-        if (totalResult > response.totalResult) {
-          alertify.set("notifier", "position", "bottom-left");
-          alertify.error("Xóa sản phẩm thành công.");
+        //Nếu sản phẩm bị xóa và không còn sản phẩm ở trang hiện tại thì chuyển về trang trước
+        if (response.products.length === 0 && pagination.page > 1) {
+          setPagination({
+            ...pagination,
+            page: `${parseInt(pagination.page) - 1}`,
+          });
+        } else {
+          setProducts(response.products);
+          if (totalResult > response.totalResult) {
+            alertify.set("notifier", "position", "bottom-left");
+            alertify.error("Xóa sản phẩm thành công.");
+          }
+          setTotalResult(response.totalResult);
         }
-        setTotalResult(response.totalResult);
       };
       fetchData();
-      if (products.length === 0) {
-        handlerChangePage(parseInt(pagination.page) - 1);
-      }
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -170,7 +181,7 @@ function Products(props) {
                             <td>{convertMoney(value.price)}</td>
                             <td>
                               <img
-                                src={value.img1}
+                                src={value.img[0]}
                                 style={{
                                   height: "60px",
                                   width: "60px",
