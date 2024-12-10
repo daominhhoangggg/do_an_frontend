@@ -17,7 +17,7 @@ function Menu(props) {
             </li>
             <li className="list-divider"></li>
           </ul>
-          (
+
           <ul id="sidebarnav">
             <li className="nav-small-cap">
               <span className="hide-menu">Components</span>
@@ -45,36 +45,6 @@ function Menu(props) {
               </a>
             </li>
 
-            <li className="sidebar-item">
-              <a
-                className="sidebar-link has-arrow"
-                href="#"
-                aria-expanded="false"
-              >
-                <i data-feather="bar-chart" className="feather-icon"></i>
-                <span className="hide-menu">Chart</span>
-              </a>
-              <ul
-                aria-expanded="false"
-                className="collapse first-level base-level-line"
-              >
-                <li className="sidebar-item">
-                  <a href="/weather" className="sidebar-link">
-                    <span className="hide-menu">Weather</span>
-                  </a>
-                </li>
-                <li className="sidebar-item">
-                  <a href="/total-revenue" className="sidebar-link">
-                    <span className="hide-menu">Total revenue</span>
-                  </a>
-                </li>
-                <li className="sidebar-item">
-                  <a href="/bestseller" className="sidebar-link">
-                    <span className="hide-menu">Bestseller</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
             <li className="sidebar-item">
               <a
                 className="sidebar-link has-arrow"
@@ -107,6 +77,28 @@ function Menu(props) {
             </li>
 
             <li className="list-divider"></li>
+
+            <li className="nav-small-cap">
+              <span className="hide-menu">Charts</span>
+            </li>
+            <li className="sidebar-item">
+              <a className="sidebar-link sidebar-link" href="/weather">
+                <i data-feather="cloud" className="feather-icon"></i>
+                <span className="hide-menu">Weather</span>
+              </a>
+            </li>
+            <li className="sidebar-item">
+              <a className="sidebar-link sidebar-link" href="/total-revenue">
+                <i data-feather="bar-chart-2" className="feather-icon"></i>
+                <span className="hide-menu">Total Revenue</span>
+              </a>
+            </li>
+            <li className="sidebar-item">
+              <a className="sidebar-link sidebar-link" href="/best-seller">
+                <i data-feather="shopping-bag" className="feather-icon"></i>
+                <span className="hide-menu">Best Seller</span>
+              </a>
+            </li>
           </ul>
           {/* ) : (
           <ul id="sidebarnav">

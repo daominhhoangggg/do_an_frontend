@@ -133,7 +133,7 @@ function Shop(props) {
       const response = await ProductAPI.getPagination(newQuery);
       console.log(response);
 
-      setProducts(response);
+      setProducts(response.products);
       // setTemp(response);
     };
 

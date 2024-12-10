@@ -43,7 +43,7 @@ function Users(props) {
                     className="breadcrumb-item text-muted active"
                     aria-current="page"
                   >
-                    Table
+                    Tables
                   </li>
                 </ol>
               </nav>

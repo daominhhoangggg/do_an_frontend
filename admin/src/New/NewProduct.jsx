@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import ProductAPI from "../API/ProductAPI";
 import alertify from "alertifyjs";
+import Loading from "../Loading/Loading";
 
 function NewProduct(props) {
   const [name, setName] = useState("");
@@ -9,7 +11,10 @@ function NewProduct(props) {
   const [short_desc, setShortDesc] = useState("");
   const [long_desc, setLongDesc] = useState("");
   const [files, setFiles] = useState([]);
+
   const [preview, setPreview] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   // nhiều file
   const handleFileChange = (e) => {
@@ -21,8 +26,8 @@ function NewProduct(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log({ name, price, category, short_desc, long_desc });
-    // console.log("files:", files[0].name);
+    setLoading(true);
+
     try {
       const form = new FormData();
       form.append("name", name);
@@ -33,19 +38,27 @@ function NewProduct(props) {
       files.forEach((file) => {
         form.append("files", file);
       });
-      const response = await ProductAPI.postNewProduct(form);
-      console.log(response);
+      await ProductAPI.postNewProduct(form);
 
-      alertify.set("notifier", "position", "bottom-left");
-      if (response.status === 201) {
-        alertify.success(response.message);
-      } else {
-        alertify.error(response.message);
-      }
+      history.push({ pathname: "/products", state: { success: true } });
+      window.location.href = "/products";
     } catch (error) {
+      setLoading(false);
       console.error("Failed to add product:", error.message);
+      alertify.set("notifier", "position", "bottom-left");
+      alertify.success(error.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="page-wrapper">
+        <div className="page-breadcrumb">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-wrapper">

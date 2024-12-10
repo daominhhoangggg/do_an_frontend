@@ -3,10 +3,15 @@ import queryString from "query-string";
 import ProductAPI from "../API/ProductAPI";
 import Pagination from "./Component/Pagination";
 import convertMoney from "../convertMoney";
+import alertify from "alertifyjs";
+import { useLocation, useHistory } from "react-router-dom";
 
 function Products(props) {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState(null);
+
+  const location = useLocation();
+  const history = useHistory();
 
   const [pagination, setPagination] = useState({
     page: "1",
@@ -29,8 +34,6 @@ function Products(props) {
   //Hàm này dùng để thay đổi state pagination.page
   //Nó sẽ truyền xuống Component con và nhận dữ liệu từ Component con truyền lên
   const handlerChangePage = (value) => {
-    console.log("Value: ", value);
-
     //Sau đó set lại cái pagination để gọi chạy làm useEffect gọi lại API pagination
     setPagination({
       page: value,
@@ -40,33 +43,62 @@ function Products(props) {
     });
   };
 
-  const fetchData = async () => {
-    const params = {
-      page: pagination.page,
-      count: pagination.count,
-      search: pagination.search,
-      category: pagination.category,
-    };
-
-    const query = queryString.stringify(params);
-
-    const newQuery = "?" + query;
-
-    const response = await ProductAPI.getPagination(newQuery);
-
-    //API trả về số sản phẩm của trang và tổng số sản phẩm
-    setProducts(response.products);
-    setTotalResult(response.totalResult);
-  };
+  useEffect(() => {
+    if (location.state?.success) {
+      alertify.set("notifier", "position", "bottom-left");
+      alertify.success("Thêm sản phẩm thành công.");
+      history.replace({
+        ...location,
+        state: { ...location.state, success: false },
+      });
+    }
+  }, [location, history]);
 
   //Gọi hàm
   useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        page: pagination.page,
+        count: pagination.count,
+        search: pagination.search,
+        category: pagination.category,
+      };
+
+      const query = queryString.stringify(params);
+      const newQuery = "?" + query;
+      const response = await ProductAPI.getPagination(newQuery);
+
+      //API trả về số sản phẩm của trang và tổng số sản phẩm
+      setProducts(response.products);
+      setTotalResult(response.totalResult);
+    };
+
     fetchData();
-  });
+  }, [pagination, totalResult]);
 
   const handleDelete = async (idProduct) => {
     try {
       await ProductAPI.deleteProduct(idProduct);
+      const fetchData = async () => {
+        const params = {
+          page: pagination.page,
+          count: pagination.count,
+          search: pagination.search,
+          category: pagination.category,
+        };
+
+        const query = queryString.stringify(params);
+        const newQuery = "?" + query;
+        const response = await ProductAPI.getPagination(newQuery);
+
+        //API trả về số sản phẩm của trang và tổng số sản phẩm
+        setProducts(response.products);
+        if (totalResult > response.totalResult) {
+          alertify.set("notifier", "position", "bottom-left");
+          alertify.error("Xóa sản phẩm thành công.");
+        }
+        setTotalResult(response.totalResult);
+      };
       fetchData();
       if (products.length === 0) {
         handlerChangePage(parseInt(pagination.page) - 1);
@@ -96,7 +128,7 @@ function Products(props) {
                     className="breadcrumb-item text-muted active"
                     aria-current="page"
                   >
-                    Table
+                    Tables
                   </li>
                 </ol>
               </nav>

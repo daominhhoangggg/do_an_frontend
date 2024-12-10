@@ -54,9 +54,12 @@ function Home(props) {
             <div className="d-flex align-items-center">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb m-0 p-0">
-                  <li className="breadcrumb-item">
+                  {/* <li className="breadcrumb-item">
                     <Link to="/">Dashboard</Link>
-                  </li>
+                  </li> */}
+                  <h3 className="page-title text-truncate text-dark font-weight-medium mb-1">
+                    Dashboard
+                  </h3>
                 </ol>
               </nav>
             </div>
@@ -95,7 +98,7 @@ function Home(props) {
                     <sup className="set-doller"> VND</sup>
                   </h2>
                   <h6 className="text-muted font-weight-normal mb-0 w-100 text-truncate">
-                    Earnings of Month
+                    Total Revenue
                   </h6>
                 </div>
                 <div className="ml-auto mt-md-3 mt-lg-0">
@@ -116,7 +119,7 @@ function Home(props) {
                     </h2>
                   </div>
                   <h6 className="text-muted font-weight-normal mb-0 w-100 text-truncate">
-                    New Order
+                    Total Order
                   </h6>
                 </div>
                 <div className="ml-auto mt-md-3 mt-lg-0">
