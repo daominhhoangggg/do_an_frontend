@@ -15,7 +15,7 @@ import Signup from "./Authentication/Signup";
 import PrivateRoute from "./Private/PrivateRouter";
 import Weather from "./Chart/Weather/Weather";
 import TotalRevenue from "./Chart/TotalRevenue/TotalRevenue";
-import DynamicBarChart from "./Chart/BarChart/BarChart";
+import DynamicBarChart from "./Chart/BestSeller/BestSeller";
 import "./css/custom.css";
 
 function App() {
