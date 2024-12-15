@@ -36,7 +36,11 @@ function Products(props) {
               <div className="position-relative mb-3">
                 <div className="badge text-white badge-"></div>
                 <Link className="d-block" to={`/detail/${value._id}`}>
-                  <img className="img-fluid w-100" src={value.img1} alt="..." />
+                  <img
+                    className="img-fluid w-100"
+                    src={value.img[0]}
+                    alt="..."
+                  />
                 </Link>
                 <div className="product-overlay">
                   <ul className="mb-0 list-inline"></ul>

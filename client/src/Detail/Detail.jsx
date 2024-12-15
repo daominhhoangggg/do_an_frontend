@@ -125,7 +125,16 @@ function Detail(props) {
     const fetchData = async () => {
       const response = await ProductAPI.getAPI();
       const data = response;
-      setProduct(data);
+
+      const temp = data.map((product) => ({
+        ...product,
+        img1: product.img[0],
+        img2: product.img[1],
+        img3: product.img[2],
+        img4: product.img[3],
+      }));
+
+      setProduct(temp);
     };
 
     fetchData();
@@ -157,8 +166,16 @@ function Detail(props) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await ProductAPI.getDetail(id);
-      console.log(response);
-      setDetail(response);
+
+      const data = {
+        ...response,
+        img1: response.img[0],
+        img2: response.img[1],
+        img3: response.img[2],
+        img4: response.img[3],
+      };
+
+      setDetail(data);
     };
 
     fetchData();
@@ -314,7 +331,7 @@ function Detail(props) {
             <ul className="list-unstyled small d-inline-block">
               <li className="mb-3 bg-white text-muted">
                 <strong className="text-uppercase text-dark">Category:</strong>
-                <a className="reset-anchor ml-2">{detail.category}s</a>
+                <a className="reset-anchor ml-2">{detail.category}</a>
               </li>
             </ul>
             <div className="row align-items-stretch mb-4">
@@ -495,7 +512,7 @@ function Detail(props) {
                     <div className="d-block mb-3 position-relative">
                       <img
                         className="img-fluid w-100"
-                        src={value.img1}
+                        src={value.img[0]}
                         alt="..."
                       />
                       <div className="product-overlay">

@@ -11,13 +11,12 @@ import convertMoney from "../convertMoney";
 
 function Shop(props) {
   const [products, setProducts] = useState([]);
-  // const [temp, setTemp] = useState([]);
+
+  // Tổng số kết quả
+  const [totalResult, setTotalResult] = useState(null);
 
   //state dùng để sắp xếp sản phẩm
   const [sort, setSort] = useState("default");
-
-  //Tổng số trang
-  const [totalPage, setTotalPage] = useState();
 
   // Get category parram from url by localtion
   const category =
@@ -78,44 +77,6 @@ function Shop(props) {
     });
   };
 
-  //Gọi hàm useEffect tìm tổng số sản phẩm để tính tổng số trang
-  //Và nó phụ thuộc và state pagination
-  useEffect(() => {
-    const fetchAllData = async () => {
-      let response;
-
-      // Nếu mà category === 'all' thì nó sẽ gọi hàm get tất cả sản phẩm
-      // Ngược lại thì nó sẽ gọi hàm pagination và phân loại sản phẩm
-      if (pagination.category === "all") {
-        response = await ProductAPI.getAPI();
-        console.log(response);
-      } else {
-        const params = {
-          page: pagination.page,
-          count: pagination.count,
-          search: pagination.search,
-          category: pagination.category,
-        };
-
-        const query = queryString.stringify(params);
-
-        const newQuery = "?" + query;
-
-        response = await ProductAPI.getPagination(newQuery);
-      }
-
-      //Tính tổng số trang = tổng số sản phẩm / số lượng sản phẩm 1 trang
-      const totalPage = Math.ceil(
-        parseInt(response.length) / parseInt(pagination.count)
-      );
-      console.log(totalPage);
-
-      setTotalPage(totalPage);
-    };
-
-    fetchAllData();
-  }, [pagination]);
-
   //Gọi hàm Pagination
   useEffect(() => {
     const fetchData = async () => {
@@ -134,7 +95,7 @@ function Shop(props) {
       console.log(response);
 
       setProducts(response.products);
-      // setTemp(response);
+      setTotalResult(response.totalResult);
     };
 
     fetchData();
@@ -180,18 +141,18 @@ function Shop(props) {
                       <img
                         style={{ width: "100%" }}
                         className="product-view d-block h-100 bg-cover bg-center"
-                        src={value.img1}
-                        alt={"image-" + value._i}
+                        src={value.img[0]}
+                        alt={"image1-" + value._id}
                       />
                       <img
                         className="d-none"
-                        href={value.img2}
-                        alt={"image-" + value._i}
+                        href={value.img[1]}
+                        alt={"image2-" + value._id}
                       />
                       <img
                         className="d-none"
-                        href={value.img3}
-                        alt={"image-" + value._i}
+                        href={value.img[2]}
+                        alt={"image3-" + value._id}
                       />
                     </div>
                     <div className="col-lg-6">
@@ -387,7 +348,7 @@ function Shop(props) {
               <Pagination
                 pagination={pagination}
                 handlerChangePage={handlerChangePage}
-                totalPage={totalPage}
+                totalResult={totalResult}
               />
             </div>
           </div>

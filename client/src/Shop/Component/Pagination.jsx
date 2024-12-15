@@ -15,11 +15,18 @@ Pagination.defaultProps = {
 };
 
 function Pagination(props) {
-  const { pagination, handlerChangePage, totalPage } = props;
+  const { pagination, handlerChangePage, totalResult } = props;
 
   const { page } = pagination;
 
+  //Tính tổng số trang = tổng số sản phẩm / số lượng sản phẩm 1 trang
+  const totalPage = Math.ceil(
+    parseInt(totalResult) / parseInt(pagination.count)
+  );
+
   let indexPage = [];
+  const start = 1 + pagination.count * (page - 1);
+  const end = Math.min(pagination.count * page, totalResult);
 
   //Tạo ra số nút bấm cho từng trang
   for (var i = 1; i <= totalPage; i++) {
@@ -73,8 +80,7 @@ function Pagination(props) {
       </ul>
       <div className="pagination justify-content-center justify-content-lg-end">
         <p className="text-small text-muted mb-0">
-          Showing {1 + pagination.count * (page - 1)}–{pagination.count * page}{" "}
-          of {parseInt(pagination.count) * totalPage} results
+          Showing {start}–{end} of {totalResult} results
         </p>
       </div>
     </nav>

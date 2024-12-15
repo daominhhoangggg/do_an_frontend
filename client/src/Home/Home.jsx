@@ -11,11 +11,18 @@ function Home(props) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await ProductAPI.getAPI();
-      console.log(response);
 
       const data = response.splice(0, 8);
 
-      setProducts(data);
+      const temp = data.map((product) => ({
+        ...product,
+        img1: product.img[0],
+        img2: product.img[1],
+        img3: product.img[2],
+        img4: product.img[3],
+      }));
+
+      setProducts(temp);
     };
 
     fetchData();
@@ -44,9 +51,10 @@ function Home(props) {
                           className="product-view d-block h-100 bg-cover bg-center"
                           src={value.img1}
                           data-lightbox={`product_${value._id}`}
+                          alt="..."
                         />
-                        <img className="d-none" href={value.img2} />
-                        <img className="d-none" href={value.img3} />
+                        <img className="d-none" href={value.img2} alt="..." />
+                        <img className="d-none" href={value.img3} alt="..." />
                       </div>
                       <div className="col-lg-6">
                         {/* Để tắt modal phải có class="close" và data-dissmiss="modal" và aria-label="Close" */}
