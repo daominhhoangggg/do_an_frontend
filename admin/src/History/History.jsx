@@ -87,7 +87,7 @@ function History(props) {
                         <th>Total</th>
                         <th>Delivery</th>
                         <th>Status</th>
-                        <th>Detail</th>
+                        {/* <th>Detail</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -109,7 +109,7 @@ function History(props) {
                                 ? "Đã Thanh Toán"
                                 : "Chưa Thanh Toán"}
                             </td>
-                            <td>
+                            {/* <td>
                               <a
                                 style={{
                                   cursor: "pointer",
@@ -119,7 +119,7 @@ function History(props) {
                               >
                                 View
                               </a>
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                     </tbody>

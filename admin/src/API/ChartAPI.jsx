@@ -1,8 +1,13 @@
 import axiosClient from "./axiosClient";
 
 const ChartAPI = {
-  getWeather: (query) => {
+  getTemperature: (query) => {
     const url = `/weather/temperature${query}`;
+    return axiosClient.get(url);
+  },
+
+  getHumidity: (query) => {
+    const url = `/weather/humidity${query}`;
     return axiosClient.get(url);
   },
 
