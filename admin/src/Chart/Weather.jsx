@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import BarChart from "../Component/BarChart";
-import LineChart from "../Component/LineChart";
-import ChartAPI from "../../API/ChartAPI";
+import BarChart from "./Component/BarChart";
+import LineChart from "./Component/LineChart";
+import ChartAPI from "../API/ChartAPI";
 
 function Weather(props) {
   const [city, setCity] = useState("hanoi");
@@ -77,14 +77,14 @@ function Weather(props) {
                 <BarChart
                   data={temperature}
                   keys={{
-                    legend: "Nhiệt độ (°C)",
+                    legend: "Nhiệt độ (°C)", // Trục dọc
                     data: [
                       "Nhiệt độ cao",
                       "Nhiệt độ thấp",
                       "Nhiệt độ trung bình",
                     ],
                   }}
-                  index={{ legend: "Thời gian (h)", data: "time" }}
+                  index={{ legend: "Thời gian (h)", data: "time" }} // Trục ngang
                 />
               </div>
             </div>
@@ -94,9 +94,9 @@ function Weather(props) {
               </div>
               <div className="card-body pt-0">
                 <LineChart
-                  data={humidity}
-                  xLegend={"Thời gian (h)"}
-                  yLegend={"Độ ẩm (%)"}
+                  data={humidity} // Dữ liệu
+                  xLegend={"Thời gian (h)"} // Trục ngang
+                  yLegend={"Độ ẩm (%)"} // Trục dọc
                 />
               </div>
             </div>

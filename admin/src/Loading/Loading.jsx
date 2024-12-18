@@ -13,6 +13,7 @@ const Loading = () => {
         left: 0,
         right: 0,
         bottom: 0,
+        zIndex: 1050,
       }}
     >
       <FadeLoader color="#5f76e8" size={50} />

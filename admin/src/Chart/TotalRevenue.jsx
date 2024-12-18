@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from "@nivo/bar";
-import ChartAPI from "../../API/ChartAPI";
+import ChartAPI from "../API/ChartAPI";
 import queryString from "query-string";
-import convertMoney from "../../convertMoney";
-import BarChart from "../Component/BarChart";
+import convertMoney from "../convertMoney";
+import BarChart from "./Component/BarChart";
 
 const TotalRevenue = (props) => {
   const [data, setData] = useState([]);

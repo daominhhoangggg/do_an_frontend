@@ -2,6 +2,7 @@
 import axios from "axios";
 import queryString from "query-string";
 import { jwtDecode } from "jwt-decode";
+import alertify from "alertifyjs";
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
@@ -44,13 +45,20 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
+      if (response.data.message) {
+        alertify.set("notifier", "position", "bottom-left");
+        alertify.success(response.data.message);
+      }
       return response.data;
     }
     return response;
   },
   (error) => {
     // Handle errors
+    alertify.set("notifier", "position", "bottom-left");
+    alertify.error(error.response.data.message);
     throw error;
   }
 );
+
 export default axiosClient;

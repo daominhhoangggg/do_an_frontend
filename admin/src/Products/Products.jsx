@@ -3,15 +3,12 @@ import queryString from "query-string";
 import ProductAPI from "../API/ProductAPI";
 import Pagination from "./Component/Pagination";
 import convertMoney from "../convertMoney";
-import alertify from "alertifyjs";
-import { useLocation, useHistory } from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 function Products(props) {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState(null);
-
-  const location = useLocation();
-  const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const [pagination, setPagination] = useState({
     page: "1",
@@ -43,23 +40,6 @@ function Products(props) {
     });
   };
 
-  useEffect(() => {
-    if (location.state?.success) {
-      alertify.set("notifier", "position", "bottom-left");
-      alertify.success("Thêm sản phẩm thành công.");
-
-      const timeout = setTimeout(() => {
-        history.replace({
-          ...location,
-          state: { ...location.state, success: false },
-        });
-      }, 3000);
-
-      // Cleanup timeout khi component unmount
-      return () => clearTimeout(timeout);
-    }
-  }, [location, history]);
-
   //Gọi hàm
   useEffect(() => {
     const fetchData = async () => {
@@ -83,6 +63,7 @@ function Products(props) {
   }, [pagination, totalResult]);
 
   const handleDelete = async (idProduct) => {
+    setLoading(true);
     try {
       await ProductAPI.deleteProduct(idProduct);
       const fetchData = async () => {
@@ -106,15 +87,13 @@ function Products(props) {
           });
         } else {
           setProducts(response.products);
-          if (totalResult > response.totalResult) {
-            alertify.set("notifier", "position", "bottom-left");
-            alertify.error("Xóa sản phẩm thành công.");
-          }
           setTotalResult(response.totalResult);
         }
       };
       fetchData();
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error deleting product:", error);
     }
   };
@@ -173,6 +152,7 @@ function Products(props) {
                       </tr>
                     </thead>
                     <tbody>
+                      {loading && <Loading />}
                       {products &&
                         products.map((value) => (
                           <tr key={value._id}>

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import ProductAPI from "../API/ProductAPI";
-import alertify from "alertifyjs";
 import Loading from "../Loading/Loading";
 
 function NewProduct(props) {
@@ -14,16 +12,14 @@ function NewProduct(props) {
 
   const [preview, setPreview] = useState([]);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
 
   // nhiều file
   const handleFileChange = (e) => {
+    e.preventDefault();
     const newFileArray = Array.from(e.target.files);
-    // setFiles(fileArray);
     const newPreviewArray = newFileArray.map((file) =>
       URL.createObjectURL(file)
     );
-    // setPreview(previewArray);
     // Thêm file mới vào đầu danh sách
     setFiles((prevFiles) => [...newFileArray, ...prevFiles]);
     setPreview((prevPreview) => [...newPreviewArray, ...prevPreview]);
@@ -33,6 +29,16 @@ function NewProduct(props) {
     // Xóa file và preview tại index
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     setPreview((prevPreview) => prevPreview.filter((_, i) => i !== index));
+  };
+
+  const clearForm = () => {
+    setName("");
+    setPrice("");
+    setCategory("");
+    setShortDesc("");
+    setLongDesc("");
+    setFiles([]);
+    setPreview([]);
   };
 
   const handleSubmit = async (e) => {
@@ -50,19 +56,13 @@ function NewProduct(props) {
         form.append("files", file);
       });
       const response = await ProductAPI.postNewProduct(form);
-      if (response.status === 201) {
-        alertify.success(response.message);
-      } else {
-        alertify.error("Failed to add product", response.message);
-      }
+      console.log(response);
 
-      history.push({ pathname: "/products", state: { success: true } });
-      window.location.href = "/products";
+      clearForm();
+      setLoading(false);
     } catch (error) {
       // console.log("error", error);
       setLoading(false);
-      alertify.set("notifier", "position", "bottom-left");
-      alertify.error(error.response.data.message);
     }
   };
 
@@ -152,10 +152,16 @@ function NewProduct(props) {
                           src={url}
                           alt={index}
                           className="img-fluid rounded shadow"
-                          style={{ height: "150px", objectFit: "cover" }}
+                          style={{
+                            height: "150px",
+                            objectFit: "cover",
+                          }}
                         />
                         <button
-                          onClick={() => handleRemoveImage(index)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            return handleRemoveImage(index);
+                          }}
                           className="btn btn-secondary btn-sm position-absolute"
                           style={{
                             top: "0px", // Đặt sát phần trên
