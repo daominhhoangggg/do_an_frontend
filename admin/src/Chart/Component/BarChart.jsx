@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ResponsiveBar } from "@nivo/bar";
-import ChartAPI from "../../API/ChartAPI";
 import Loading from "../../Loading/Loading";
+import PropTypes from "prop-types";
 
-function BarChart() {
-  const [data, setData] = useState([]);
-  const [city, setCity] = useState("hanoi");
+BarChart.propTypes = {
+  data: PropTypes.array,
+  keys: PropTypes.object,
+  index: PropTypes.object,
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const query = "?city=" + city;
-      const response = await ChartAPI.getTemperature(query);
+BarChart.defaultProps = {
+  data: [],
+  keys: {},
+  index: {},
+};
 
-      const chartData = response.map((item) => ({
-        time: item.time,
-        "Nhiệt độ cao": item.high,
-        "Nhiệt độ thấp": item.low,
-        "Nhiệt độ trung bình": item.average,
-      }));
-
-      setData(chartData);
-    };
-    fetchData();
-  }, [city]);
+function BarChart(props) {
+  const { data, keys, index } = props;
+  console.log(data);
 
   return (
     <div style={{ height: "500px" }}>
-      <h3 className="card-title" style={{ marginBottom: 0 }}>
-        Biểu đồ nhiệt độ
-      </h3>
       {data.length > 0 ? (
         <ResponsiveBar
           data={data}
@@ -60,11 +52,11 @@ function BarChart() {
               },
             },
           }}
-          keys={["Nhiệt độ cao", "Nhiệt độ thấp", "Nhiệt độ trung bình"]}
-          indexBy="time"
+          keys={keys.data}
+          indexBy={index.data}
           margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
           padding={0.3}
-          // groupMode="grouped"
+          groupMode="grouped"
           valueScale={{ type: "linear" }}
           indexScale={{ type: "band", round: true }}
           colors={{ scheme: "nivo" }}
@@ -75,7 +67,7 @@ function BarChart() {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Thời gian",
+            legend: index.legend, // Tên trục ngang dưới
             legendPosition: "middle",
             legendOffset: 32,
           }}
@@ -83,7 +75,7 @@ function BarChart() {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Nhiệt độ (°C)",
+            legend: keys.legend, // Tên trục dọc trái
             legendPosition: "middle",
             legendOffset: -40,
           }}

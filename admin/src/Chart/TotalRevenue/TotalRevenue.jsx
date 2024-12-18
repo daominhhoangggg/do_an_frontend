@@ -1,61 +1,82 @@
+import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from "@nivo/bar";
-import data from "./data";
-import React from "react";
+import ChartAPI from "../../API/ChartAPI";
+import queryString from "query-string";
+import convertMoney from "../../convertMoney";
+import BarChart from "../Component/BarChart";
 
-const TotalRevenue = () => {
-  //fetch api
-  // const [data, setData] = useState([]); // State lưu dữ liệu biểu đồ
-  // const [loading, setLoading] = useState(false); // State để hiển thị trạng thái tải dữ liệu
-  // const [error, setError] = useState(null); // State để xử lý lỗi
+const TotalRevenue = (props) => {
+  const [data, setData] = useState([]);
+  const [sales, setSales] = useState([]);
 
-  // // Hàm gọi API từ backend
-  // const fetchData = async () => {
-  //     try {
-  //         setLoading(true); // Hiển thị trạng thái tải
-  //         setError(null); // Xóa lỗi trước đó (nếu có)
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [limit, setLimit] = useState(7);
 
-  //         // Gọi API (thay URL bằng endpoint của bạn)
-  //         const response = await axios.get("http://localhost:5000/api/revenue");
+  // Custom BarChart
+  const [keys, setKeys] = useState({});
+  const [index, setIndex] = useState({});
 
-  //         // Cập nhật dữ liệu vào state
-  //         setData(response.data);
-  //     } catch (err) {
-  //         console.error("Error fetching data:", err);
-  //         setError("Failed to load data from backend.");
-  //     } finally {
-  //         setLoading(false); // Kết thúc trạng thái tải
-  //     }
-  // };
-  // Hàm tính tổng giá trị cho từng cột
-  const calculateTotalPerCountry = (data) => {
-    return data.map((row) => {
-      // Tính tổng số lượng trong từng `row`
-      const total = Object.keys(row).reduce((sum, key) => {
-        // Bỏ qua các trường `country` và các trường kết thúc bằng "Color"
-        if (
-          key !== "country" &&
-          !key.endsWith("Color") &&
-          typeof row[key] === "number"
-        ) {
-          return sum + row[key];
-        }
-        return sum;
-      }, 0);
-
-      // Trả về kết quả với `country` và `total`
-      return {
-        country: row.country,
-        total,
+  // Gọi API lấy thông tin cả năm
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        year,
+        limit,
       };
-    });
-  };
+      const query = "?" + queryString.stringify(params);
+      const response = await ChartAPI.getProductSales(query);
 
-  // Tính tổng doanh thu
-  const result = calculateTotalPerCountry(data);
+      console.log(response);
+
+      const result = {};
+      const productNames = new Set();
+
+      response.data.forEach((item) => {
+        const month = item._id.month;
+        const { totalRevenue, productData } = item;
+        const productName = productData?.name || "N/A";
+
+        productNames.add(productName);
+
+        if (!result[month]) {
+          result[month] = { month };
+        }
+        result[month][productName] = totalRevenue / 1000000;
+      });
+
+      setData(Object.values(result));
+      setIndex({ legend: "Tháng", data: "month" });
+      setKeys({
+        legend: "Doanh thu (triệu VND)",
+        data: Array.from(productNames),
+      });
+    };
+    fetchData();
+  }, [year, limit]);
+
+  // Gọi API lấy thông tin của tháng
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        month,
+        year,
+        limit,
+      };
+      const query = "?" + queryString.stringify(params);
+      const response = await ChartAPI.getMonthlyRevenue(query);
+
+      console.log(response);
+
+      setSales(response.data);
+    };
+
+    fetchData();
+  }, [month, year, limit]);
 
   return (
     <div className="page-wrapper">
-      <div className="page-breadcrumb">
+      {/* <div className="page-breadcrumb">
         <div className="row">
           <div className="col-7 align-self-center">
             <h4 className="page-title text-truncate text-dark font-weight-medium mb-1">
@@ -81,27 +102,14 @@ const TotalRevenue = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card">
-              <button
-                // onClick={fetchData} // Gọi lại hàm fetchData khi nhấn nút
-                style={{
-                  marginBottom: "20px",
-                  padding: "10px 20px",
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Update Data
-              </button>
               <div className="card-body">
-                <div style={{ height: "500px" }}>
+                <h4 className="card-title">Total Revenue</h4>
+                {/* <div style={{ height: "500px" }}>
                   <ResponsiveBar
                     data={data}
                     theme={{
@@ -229,29 +237,60 @@ const TotalRevenue = () => {
                       e.indexValue
                     }
                   />
-                </div>
+                </div> */}
+                <BarChart data={data} keys={keys} index={index} />
               </div>
               <div className="card-body">
                 {/* Bảng tổng doanh thu */}
-                <div className="revenue-table">
-                  <h4>Total Revenue per Food Item</h4>
-                  <table className="table table-bordered">
+                <h4 className="card-title">Monthly Revenue</h4>
+                <div className="table-responsive">
+                  <table className="table table-striped table-bordered no-wrap">
                     <thead>
                       <tr>
-                        <th>Food Item</th>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Category</th>
                         <th>Total Revenue</th>
+                        <th>Total Sold</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {result.map((row) => (
-                        <tr key={row.country}>
-                          <td>{row.country}</td>
-                          <td>{row.total}</td>
-                        </tr>
-                      ))}
+                      {sales.length > 0 &&
+                        sales.map((product, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{product.productData.name}</td>
+                            <td>
+                              <img
+                                src={product.productData.img[0]}
+                                style={{ height: "60px", width: "60px" }}
+                                alt="..."
+                              />
+                            </td>
+                            <td>{product.productData.category}</td>
+                            <td>{convertMoney(product.totalRevenue)}</td>
+                            <td>{product.totalSold}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
+
+                <button
+                  // onClick={fetchData} // Gọi lại hàm fetchData khi nhấn nút
+                  style={{
+                    marginBottom: "20px",
+                    padding: "10px 20px",
+                    backgroundColor: "#28a745",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Update Data
+                </button>
               </div>
             </div>
           </div>

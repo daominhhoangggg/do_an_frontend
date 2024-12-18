@@ -18,10 +18,21 @@ function NewProduct(props) {
 
   // nhiều file
   const handleFileChange = (e) => {
-    const fileArray = Array.from(e.target.files);
-    setFiles(fileArray);
-    const previewArray = fileArray.map((file) => URL.createObjectURL(file));
-    setPreview(previewArray);
+    const newFileArray = Array.from(e.target.files);
+    // setFiles(fileArray);
+    const newPreviewArray = newFileArray.map((file) =>
+      URL.createObjectURL(file)
+    );
+    // setPreview(previewArray);
+    // Thêm file mới vào đầu danh sách
+    setFiles((prevFiles) => [...newFileArray, ...prevFiles]);
+    setPreview((prevPreview) => [...newPreviewArray, ...prevPreview]);
+  };
+  // Xử lý xóa ảnh
+  const handleRemoveImage = (index) => {
+    // Xóa file và preview tại index
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setPreview((prevPreview) => prevPreview.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -38,15 +49,20 @@ function NewProduct(props) {
       files.forEach((file) => {
         form.append("files", file);
       });
-      await ProductAPI.postNewProduct(form);
+      const response = await ProductAPI.postNewProduct(form);
+      if (response.status === 201) {
+        alertify.success(response.message);
+      } else {
+        alertify.error("Failed to add product", response.message);
+      }
 
       history.push({ pathname: "/products", state: { success: true } });
       window.location.href = "/products";
     } catch (error) {
+      // console.log("error", error);
       setLoading(false);
-      console.error("Failed to add product:", error.message);
       alertify.set("notifier", "position", "bottom-left");
-      alertify.success(error.message);
+      alertify.error(error.response.data.message);
     }
   };
 
@@ -129,7 +145,7 @@ function NewProduct(props) {
                       onChange={handleFileChange}
                     />
                   </div>
-                  <div className="row mt-3 mb-3">
+                  <div className="row mt-3 mb-3 position-relative">
                     {preview.map((url, index) => (
                       <div key={index} className="col-md-3 mb-3">
                         <img
@@ -138,6 +154,23 @@ function NewProduct(props) {
                           className="img-fluid rounded shadow"
                           style={{ height: "150px", objectFit: "cover" }}
                         />
+                        <button
+                          onClick={() => handleRemoveImage(index)}
+                          className="btn btn-secondary btn-sm position-absolute"
+                          style={{
+                            top: "0px", // Đặt sát phần trên
+                            right: "5%", // Đặt sát phần phải
+                            zIndex: 10, // Đảm bảo nút hiển thị trên ảnh
+                            borderRadius: "50%", // Nút tròn
+                            width: "25px", // Kích thước nút nhỏ gọn
+                            height: "25px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          X
+                        </button>
                       </div>
                     ))}
                   </div>

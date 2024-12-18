@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 import Loading from "../../Loading/Loading";
-import ChartAPI from "../../API/ChartAPI";
+import PropTypes from "prop-types";
 
-function LineChart() {
-  const [data, setData] = useState([]);
-  const [city, setCity] = useState("hanoi");
+LineChart.propTypes = {
+  data: PropTypes.array,
+  xLegend: PropTypes.string,
+  yLegend: PropTypes.string,
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const query = "?city=" + city;
-      const response = await ChartAPI.getHumidity(query);
+LineChart.defaultProps = {
+  data: [],
+  xLegend: "Time",
+  yLegend: "Value",
+};
 
-      setData(response);
-    };
-    fetchData();
-  }, [city]);
+function LineChart(props) {
+  const { data, xLegend, yLegend } = props;
+  console.log(data);
 
   return (
     <div style={{ height: "500px" }}>
-      <h3 className="card-title" style={{ marginBottom: 0 }}>
-        Biểu đồ độ ẩm
-      </h3>
       {data.length > 0 ? (
         <ResponsiveLine
           data={data}
@@ -75,7 +74,7 @@ function LineChart() {
             tickSize: 0,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Thời gian",
+            legend: xLegend,
             legendOffset: 36,
             legendPosition: "middle",
           }}
@@ -84,7 +83,7 @@ function LineChart() {
             tickSize: 3,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Độ ẩm (%)",
+            legend: yLegend,
             legendOffset: -40,
             legendPosition: "middle",
           }}

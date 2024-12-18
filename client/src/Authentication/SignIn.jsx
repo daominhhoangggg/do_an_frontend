@@ -27,16 +27,6 @@ function SignIn(props) {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await UserAPI.getAllData();
-
-  //     setUser(response);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -73,9 +63,6 @@ function SignIn(props) {
             try {
               const response = await UserAPI.postLogin(query);
 
-              // setErrorEmail(false);
-              // setErrorPassword(false);
-
               localStorage.setItem("id_user", response.user._id);
 
               localStorage.setItem("name_user", response.user.fullname);
@@ -87,13 +74,13 @@ function SignIn(props) {
 
               setCheckPush(true);
             } catch (error) {
-              if (error.response.data.error === email) {
+              if (error.response.data.error === "email") {
                 setErrorEmail(true);
                 return;
               } else {
                 setErrorEmail(false);
 
-                if (error.response.data.error === password) {
+                if (error.response.data.error === "password") {
                   setErrorPassword(true);
                   return;
                 }

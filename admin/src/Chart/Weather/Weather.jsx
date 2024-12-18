@@ -1,12 +1,41 @@
 import React, { useEffect, useState } from "react";
 import BarChart from "../Component/BarChart";
 import LineChart from "../Component/LineChart";
+import ChartAPI from "../../API/ChartAPI";
 
 function Weather(props) {
-
+  const [city, setCity] = useState("hanoi");
   const [temperature, setTemperature] = useState([]);
   const [humidity, setHumidity] = useState([]);
 
+  // Lấy dữ liệu nhiệt độ
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = "?city=" + city;
+      const response = await ChartAPI.getTemperature(query);
+
+      const result = response.map((item) => ({
+        time: item.time,
+        "Nhiệt độ cao": item.high,
+        "Nhiệt độ thấp": item.low,
+        "Nhiệt độ trung bình": item.average,
+      }));
+
+      setTemperature(result);
+    };
+    fetchData();
+  }, [city]);
+
+  // Lấy dữ liệu độ ẩm
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = "?city=" + city;
+      const response = await ChartAPI.getHumidity(query);
+
+      setHumidity(response);
+    };
+    fetchData();
+  }, [city]);
 
   return (
     <div className="page-wrapper">
@@ -41,17 +70,41 @@ function Weather(props) {
         <div className="row">
           <div className="col-12">
             <div className="card">
-              <div className="card-body">
-                <BarChart />
+              <div className="card-body mt-3">
+                <h3 className="card-title">Biểu đồ nhiệt độ</h3>
+              </div>
+              <div className="card-body pt-0">
+                <BarChart
+                  data={temperature}
+                  keys={{
+                    legend: "Nhiệt độ (°C)",
+                    data: [
+                      "Nhiệt độ cao",
+                      "Nhiệt độ thấp",
+                      "Nhiệt độ trung bình",
+                    ],
+                  }}
+                  index={{ legend: "Thời gian (h)", data: "time" }}
+                />
               </div>
             </div>
             <div className="card">
-              <div className="card-body">
-                <LineChart />
+              <div className="card-body mt-3">
+                <h3 className="card-title">Biểu đồ độ ẩm</h3>
+              </div>
+              <div className="card-body pt-0">
+                <LineChart
+                  data={humidity}
+                  xLegend={"Thời gian (h)"}
+                  yLegend={"Độ ẩm (%)"}
+                />
               </div>
             </div>
             <div className="card">
-              <div className="card-body">{/* <MixChart /> */}</div>
+              <div className="card-body mt-3">
+                <h3 className="card-title">Biểu đồ</h3>
+              </div>
+              <div className="card-body pt-0"></div>
             </div>
           </div>
         </div>

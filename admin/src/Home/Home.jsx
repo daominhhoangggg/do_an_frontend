@@ -269,7 +269,7 @@ function Home(props) {
                         <th>Total</th>
                         <th>Delivery</th>
                         <th>Status</th>
-                        <th>Detail</th>
+                        {/* <th>Detail</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -291,7 +291,7 @@ function Home(props) {
                                 ? "Đã Thanh Toán"
                                 : "Chưa Thanh Toán"}
                             </td>
-                            <td>
+                            {/* <td>
                               <a
                                 style={{
                                   cursor: "pointer",
@@ -301,7 +301,7 @@ function Home(props) {
                               >
                                 View
                               </a>
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                     </tbody>

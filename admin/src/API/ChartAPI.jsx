@@ -11,13 +11,13 @@ const ChartAPI = {
     return axiosClient.get(url);
   },
 
-  getRevenue: (query) => {
-    const url = `/revenue${query}`;
+  getMonthlyRevenue: (query) => {
+    const url = `/products/revenue${query}`;
     return axiosClient.get(url);
   },
 
-  getBestSeller: (query) => {
-    const url = `/bestseller${query}`;
+  getProductSales: (query) => {
+    const url = `/products/sales${query}`;
     return axiosClient.get(url);
   },
 };
