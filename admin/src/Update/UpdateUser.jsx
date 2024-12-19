@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
 
-function Register(props) {
+function Update(props) {
   const [fullname, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -68,10 +68,10 @@ function Register(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     if (!fullname || !phone || !email) {
-      setNameError(true); //
+      setNameError(true);
       return;
     } else {
-      setNameError(false); //
+      setNameError(false);
       if (!validateEmail(email)) {
         setEmailRegex(true);
         return;
@@ -202,4 +202,4 @@ function Register(props) {
   );
 }
 
-export default Register;
+export default Update;

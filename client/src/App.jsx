@@ -14,6 +14,7 @@ import SignUp from "./Authentication/SignUp";
 import Checkout from "./Checkout/Checkout";
 import History from "./History/History";
 import Shop from "./Shop/Shop";
+import UpdateUser from "./Update/Update";
 // import Chat from "./Share/Chat/Chat";
 
 function App() {
@@ -22,15 +23,16 @@ function App() {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route exact path="/" component={Home} />{" "}
-          <Route path="/detail/:id" component={Detail} />{" "}
-          <Route path="/cart" component={Cart} />{" "}
-          <Route path="/signin" component={SignIn} />{" "}
-          <Route path="/signup" component={SignUp} />{" "}
-          <Route path="/checkout" component={Checkout} />{" "}
-          <Route path="/history" component={History} />{" "}
+          <Route exact path="/" component={Home} />
+          <Route path="/detail/:id" component={Detail} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/user/:userId" component={UpdateUser} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/history" component={History} />
           <Route path="/shop" component={Shop} />
-        </Switch>{" "}
+        </Switch>
       </BrowserRouter>
 
       {/* <Chat /> */}

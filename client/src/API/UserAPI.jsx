@@ -20,6 +20,11 @@ const UserAPI = {
     const url = `/users/login/${query}`;
     return axiosClient.post(url);
   },
+
+  putUpdateUser: (data) => {
+    const url = `/users/update`;
+    return axiosClient.put(url, data);
+  },
 };
 
 export default UserAPI;
