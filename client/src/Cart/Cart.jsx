@@ -156,8 +156,7 @@ function Cart(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.putToCart(query);
-        console.log(response);
+        await CartAPI.putToCart(query);
       };
 
       fetchPut();

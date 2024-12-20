@@ -15,7 +15,7 @@ function SignIn(props) {
 
   const [password, setPassword] = useState("");
 
-  // const [user, setUser] = useState({});
+  const user = useSelector((state) => state.Session.user);
 
   const [errorEmail, setErrorEmail] = useState(false);
   const [emailRegex, setEmailRegex] = useState(false);
@@ -65,11 +65,15 @@ function SignIn(props) {
 
               localStorage.setItem("id_user", response.user._id);
 
-              localStorage.setItem("name_user", response.user.fullname);
-
               localStorage.setItem("token", response.token);
 
-              const action = addSession(localStorage.getItem("id_user"));
+              const data = {
+                userId: response.user._id,
+                fullname: response.user.fullname,
+                email: response.user.email,
+              };
+
+              const action = addSession(data);
               dispatch(action);
 
               setCheckPush(true);
@@ -102,7 +106,7 @@ function SignIn(props) {
         for (let i = 0; i < listCart.length; i++) {
           //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
           const params = {
-            idUser: localStorage.getItem("id_user"),
+            idUser: user.userId,
             idProduct: listCart[i].idProduct,
             count: listCart[i].count,
           };
@@ -118,7 +122,7 @@ function SignIn(props) {
     };
 
     fetchData();
-  }, [checkPush, listCart]);
+  }, [checkPush, listCart, user]);
 
   function validateEmail(email) {
     const re =

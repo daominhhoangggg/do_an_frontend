@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useDispatch } from "react-redux";
+import { addSession } from "../Redux/Action/ActionSession";
 import UserAPI from "../API/UserAPI";
 import "./Update.css";
 
@@ -18,6 +20,7 @@ function UpdateUser(props) {
   const [load, setLoad] = useState(true);
 
   const idUser = useParams().userId;
+  const dispatch = useDispatch();
 
   //Check Validation
   const handlerSubmit = async () => {
@@ -58,8 +61,16 @@ function UpdateUser(props) {
         phone: phone,
         email: email,
       };
-      console.log(data);
+
       await UserAPI.putUpdateUser(data);
+
+      // Cập nhật Redux
+      const updatedUser = {
+        userId: idUser,
+        fullname: fullname,
+        email: email,
+      };
+      dispatch(addSession(updatedUser));
     } catch (err) {
       console.log(err);
     } finally {

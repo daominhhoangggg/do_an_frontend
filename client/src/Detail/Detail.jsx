@@ -30,7 +30,7 @@ function Detail(props) {
   const [comment, setComment] = useState("");
 
   // id_user đã đăng nhập
-  const idUser = useSelector((state) => state.Session.idUser);
+  const user = useSelector((state) => state.Session.user);
 
   // Listcomment
   const [list_comment, set_list_comment] = useState([]);
@@ -69,7 +69,7 @@ function Detail(props) {
 
   // Hàm này dùng để bình luận
   const handlerComment = () => {
-    if (idUser === "") {
+    if (!user.userId) {
       alertify.set("notifier", "position", "bottom-left");
       alertify.error("Vui Lòng Kiểm Tra Đăng Nhập!");
       return;
@@ -78,8 +78,8 @@ function Detail(props) {
     const fetchSendComment = async () => {
       const params = {
         idProduct: id,
-        idUser: localStorage.getItem("id_user"),
-        fullname: localStorage.getItem("name_user"),
+        idUser: user.userId,
+        fullname: user.fullname,
         content: comment,
         star: star,
       };

@@ -17,7 +17,7 @@ function Header(props) {
   const dispatch = useDispatch();
 
   //Get IdUser từ redux khi user đã đăng nhập
-  const idUser = useSelector((state) => state.Session.idUser);
+  const user = useSelector((state) => state.Session.user);
 
   //Get idtemp từ redux khi user chưa đăng nhập
   const idTemp = useSelector((state) => state.Cart.id_user);
@@ -31,13 +31,19 @@ function Header(props) {
 
       if (decoded.exp < currentTime) {
         localStorage.removeItem("token");
-        const action = deleteSession("");
+        const action = deleteSession();
         dispatch(action);
         setLoginUser(false);
         setNameUser(false);
       } else {
         // đưa dữ liệu vào Redux
-        const action = addSession(decoded.userId);
+        const data = {
+          userId: decoded.userId,
+          fullname: decoded.fullname,
+          email: decoded.email,
+        };
+
+        const action = addSession(data);
         dispatch(action);
         setLoginUser(true);
         setNameUser(true);
@@ -50,7 +56,7 @@ function Header(props) {
       const action = addUser(localStorage.getItem("id_temp"));
       dispatch(action);
     }
-  }, [idUser, dispatch]);
+  }, [user.userId, dispatch]);
 
   const handlerActive = (value) => {
     setActive(value);
