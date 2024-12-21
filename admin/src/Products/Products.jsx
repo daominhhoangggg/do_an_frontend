@@ -177,6 +177,7 @@ function Products(props) {
                                   color: "white",
                                 }}
                                 className="btn btn-success"
+                                href={`/products/${value._id}`}
                               >
                                 Update
                               </a>

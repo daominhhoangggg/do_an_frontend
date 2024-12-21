@@ -25,7 +25,6 @@ function Update(props) {
       if (idUser) {
         const response = await UserAPI.getDetailData(idUser);
 
-        // setUser(response);
         setFullName(response.fullname);
         setPhone(response.phone);
         setEmail(response.email);

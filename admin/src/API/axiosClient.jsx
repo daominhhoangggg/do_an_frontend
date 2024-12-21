@@ -57,6 +57,7 @@ axiosClient.interceptors.response.use(
     // Handle errors
     alertify.set("notifier", "position", "bottom-left");
     alertify.error(error.response.data.message);
+    console.error("Error response:", error.response);
     throw error;
   }
 );

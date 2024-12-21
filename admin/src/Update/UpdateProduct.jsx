@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ProductAPI from "../API/ProductAPI";
 import Loading from "../Loading/Loading";
 
@@ -9,11 +10,12 @@ function UpdateProduct(props) {
   const [short_desc, setShortDesc] = useState("");
   const [long_desc, setLongDesc] = useState("");
   const [files, setFiles] = useState([]);
-
   const [preview, setPreview] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // nhiều file
+  const productId = useParams().productId;
+
+  // Xử lý nhiều file
   const handleFileChange = (e) => {
     e.preventDefault();
     const newFileArray = Array.from(e.target.files);
@@ -31,34 +33,54 @@ function UpdateProduct(props) {
     setPreview((prevPreview) => prevPreview.filter((_, i) => i !== index));
   };
 
-  const clearForm = () => {
-    setName("");
-    setPrice("");
-    setCategory("");
-    setShortDesc("");
-    setLongDesc("");
-    setFiles([]);
-    setPreview([]);
-  };
+  // Lấy thông tin sản phẩm cần cập nhật
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const response = await ProductAPI.getDetail(productId);
 
+        console.log(response);
+
+        setName(response.name);
+        setPrice(response.price);
+        setCategory(response.category);
+        setShortDesc(response.short_desc);
+        setLongDesc(response.long_desc);
+        setPreview(response.img);
+        setLoading(false);
+      } catch (error) {
+        console.log("error", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, []);
+
+  // Xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const remain = preview.filter((url) => !url.startsWith("blob:"));
+
       const form = new FormData();
       form.append("name", name);
       form.append("price", price);
       form.append("category", category);
       form.append("short_desc", short_desc);
       form.append("long_desc", long_desc);
+      remain.forEach((url) => {
+        form.append("remain", url);
+      });
       files.forEach((file) => {
         form.append("files", file);
       });
-      const response = await ProductAPI.postNewProduct(form);
-      console.log(response);
 
-      clearForm();
+      await ProductAPI.updateProduct(productId, form);
+
       setLoading(false);
     } catch (error) {
       // console.log("error", error);
@@ -73,7 +95,7 @@ function UpdateProduct(props) {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">Add New Product</h4>
+                <h4 className="card-title">Update Product</h4>
                 <hr />
                 {loading && <Loading />}
                 <form

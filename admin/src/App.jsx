@@ -17,6 +17,7 @@ import Weather from "./Chart/Weather";
 import TotalRevenue from "./Chart/TotalRevenue";
 import DynamicBarChart from "./Chart/BestSeller/BestSeller";
 import "./css/custom.css";
+import UpdateProduct from "./Update/UpdateProduct";
 
 function App() {
   const user = getUserFromToken();
@@ -47,11 +48,15 @@ function App() {
             <Switch>
               <Route path="/login" component={Login} />
               <PrivateRoute exact path="/" component={Home} />
-              <PrivateRoute path="/users/:userId" component={Update} />
               <PrivateRoute path="/weather" component={Weather} />
               <PrivateRoute path="/best-seller" component={DynamicBarChart} />
               <PrivateRoute path="/total-revenue" component={TotalRevenue} />
+              <PrivateRoute path="/users/:userId" component={Update} />
               <PrivateRoute path="/users" component={Users} />
+              <PrivateRoute
+                path="/products/:productId"
+                component={UpdateProduct}
+              />
               <PrivateRoute path="/products" component={Products} />
               <PrivateRoute path="/history" component={History} />
               <PrivateRoute path="/signup" component={Signup} />

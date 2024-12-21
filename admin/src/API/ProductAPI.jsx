@@ -23,10 +23,20 @@ const ProductAPI = {
 
   postNewProduct: (data) => {
     const url = `/products/add`;
-    const headers = data instanceof FormData
-      ? { "Content-Type": "multipart/form-data" }
-      : { "Content-Type": "application/json" };;
+    const headers =
+      data instanceof FormData
+        ? { "Content-Type": "multipart/form-data" }
+        : { "Content-Type": "application/json" };
     return axiosClient.post(url, data, { headers });
+  },
+
+  updateProduct: (query, data) => {
+    const url = `/products/update/${query}`;
+    const headers =
+      data instanceof FormData
+        ? { "Content-Type": "multipart/form-data" }
+        : { "Content-Type": "application/json" };
+    return axiosClient.put(url, data, { headers });
   },
 
   deleteProduct: (query) => {
