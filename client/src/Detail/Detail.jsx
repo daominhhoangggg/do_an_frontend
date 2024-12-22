@@ -8,6 +8,7 @@ import CartAPI from "../API/CartAPI";
 import queryString from "query-string";
 import CommentAPI from "../API/CommentAPI";
 import convertMoney from "../convertMoney";
+import { use } from "react";
 
 function Detail(props) {
   const [detail, setDetail] = useState({});
@@ -161,6 +162,10 @@ function Detail(props) {
 
     setText(value);
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   //Hàm này để lấy dữ liệu chi tiết sản phẩm
   useEffect(() => {

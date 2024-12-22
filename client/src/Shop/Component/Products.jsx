@@ -47,7 +47,6 @@ function Products(props) {
                 </div>
               </div>
               <h6>
-                {" "}
                 <a className="reset-anchor" href="detail.html">
                   {value.name}
                 </a>

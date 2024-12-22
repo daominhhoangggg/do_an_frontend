@@ -79,7 +79,7 @@ function Home(props) {
                               <a
                                 className="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
                                 href={`/detail/${value._id}`}
-                                target="_blank"
+                                // target="_blank"
                               >
                                 <i className="fa fa-shopping-cart"></i>
                                 <span className="ml-2">View Detail</span>
@@ -191,10 +191,10 @@ function Home(props) {
                           <ul className="mb-0 list-inline">
                             {/* <li className="list-inline-item m-0 p-0"><a className="btn btn-sm btn-outline-dark" href="#"><i className="far fa-heart"></i></a></li> */}
                             {/* <li className="list-inline-item m-0 p-0">
-                                                            <Link className="btn btn-sm btn-dark" to={`/detail/${value._id}`}>
-                                                                Add to cart
-                                                            </Link>
-                                                        </li> */}
+                                    <Link className="btn btn-sm btn-dark" to={`/detail/${value._id}`}>
+                                        Add to cart
+                                    </Link>
+                                </li> */}
                           </ul>
                         </div>
                       </div>

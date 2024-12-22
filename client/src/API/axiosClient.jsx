@@ -37,7 +37,6 @@ axiosClient.interceptors.request.use(async (config) => {
   if (token) {
     config.headers["Authorization"] = "Bearer " + token;
   }
-
   return config;
 });
 
@@ -53,10 +52,11 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Handle errors
+    // Handle errors when response
     alertify.set("notifier", "position", "bottom-left");
     alertify.error(error.response.data.message);
     throw error;
   }
 );
+
 export default axiosClient;

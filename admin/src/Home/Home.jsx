@@ -15,10 +15,6 @@ function Home(props) {
   const [revenue, setRevenue] = useState(0);
   const { user } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   window.location.href = "/login";
-  // });
-
   const fetchHistory = async () => {
     const response = await HistoryAPI.getAll();
     setHistory(response);

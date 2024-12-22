@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import HistoryAPI from "../../API/HistoryAPI";
 import queryString from "query-string";
 import convertMoney from "../../convertMoney";
@@ -9,18 +10,23 @@ MainHistory.propTypes = {};
 function MainHistory(props) {
   const [listCart, setListCart] = useState([]);
 
+  const user = useSelector((state) => state.Session.user);
+
   useEffect(() => {
     const fetchData = async () => {
-      const params = {
-        idUser: localStorage.getItem("id_user"),
-      };
+      try {
+        const params = {
+          idUser: user.userId,
+        };
 
-      const query = "?" + queryString.stringify(params);
+        const query = "?" + queryString.stringify(params);
 
-      const response = await HistoryAPI.getHistoryAPI(query);
-      console.log(response);
+        const response = await HistoryAPI.getHistoryAPI(query);
 
-      setListCart(response);
+        setListCart(response);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchData();
@@ -50,39 +56,30 @@ function MainHistory(props) {
           <thead className="bg-light">
             <tr className="text-center">
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">ID Order</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">ID User</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Name</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Phone</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Address</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Total</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Delivery</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Status</strong>
               </th>
               <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Detail</strong>
               </th>
             </tr>
@@ -134,6 +131,13 @@ function MainHistory(props) {
                   </td>
                 </tr>
               ))}
+            {listCart.length <= 0 && (
+              <tr className="text-center" style={{ height: "300px" }}>
+                <td className="align-middle border-0" colSpan="9">
+                  <p>You haven't made any purchases.</p>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

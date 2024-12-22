@@ -345,11 +345,20 @@ function Shop(props) {
 
               <Products products={products} sort={sort} />
 
-              <Pagination
-                pagination={pagination}
-                handlerChangePage={handlerChangePage}
-                totalResult={totalResult}
-              />
+              {products.length <= 0 ? (
+                <div
+                  className="row mb-3 align-items-center justify-content-center"
+                  style={{ height: "80%" }}
+                >
+                  <p>Không tìm thấy sản phẩm nào !</p>
+                </div>
+              ) : (
+                <Pagination
+                  pagination={pagination}
+                  handlerChangePage={handlerChangePage}
+                  totalResult={totalResult}
+                />
+              )}
             </div>
           </div>
         </div>
