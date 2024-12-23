@@ -3,23 +3,19 @@ import { AuthContext } from "../Context/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import Logoicon from "../Image/logo-icon.png";
-import Logotext from "../Image/logo-text.png";
-import Logolight from "../Image/logo-light-text.png";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+// import Logotext from "../Image/logo-text.png";
+// import Logolight from "../Image/logo-light-text.png";
 
 function Header(props) {
   const { user } = useContext(AuthContext);
-  const { loading, error, dispatch } = useContext(AuthContext);
-
-  const history = useHistory();
+  const { dispatch } = useContext(AuthContext);
 
   const handleLogout = async () => {
-    localStorage.clear("user");
+    localStorage.removeItem("token");
 
     dispatch("LOGOUT");
 
-    history.push("/login");
-    window.location.reload();
+    window.location.href = "/login";
   };
 
   return (

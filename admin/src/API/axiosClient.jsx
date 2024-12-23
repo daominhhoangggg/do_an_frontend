@@ -15,7 +15,6 @@ const axiosClient = axios.create({
 });
 
 const isTokenExpired = (token) => {
-  if (!token) return true;
   try {
     const decoded = jwtDecode(token);
     return decoded.exp * 1000 < Date.now();
@@ -28,9 +27,9 @@ axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
   const token = localStorage.getItem("token");
 
-  if (isTokenExpired(token)) {
+  if (token && isTokenExpired(token)) {
     localStorage.removeItem("token");
-    console.log("Token Expired.");
+    console.log("Phiên đăng nhập đã hết hạn.");
   }
 
   config.headers["Authorization"] = "Bearer " + token;
