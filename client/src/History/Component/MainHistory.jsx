@@ -29,8 +29,8 @@ function MainHistory(props) {
       }
     };
 
-    fetchData();
-  }, []);
+    if (user.userId) fetchData();
+  }, [user.userId]);
 
   return (
     <div className="container">

@@ -133,12 +133,6 @@ function UpdateUser(props) {
               <div className="col-lg-6 text-lg-right">
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li className="breadcrumb-item">
-                      <a href="cart.html">User</a>
-                    </li>
                     <li className="breadcrumb-item active" aria-current="page">
                       Info
                     </li>
