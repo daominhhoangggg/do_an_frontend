@@ -6,8 +6,8 @@ import { jwtDecode } from "jwt-decode";
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
-  // baseURL: "https://njs301x-asm-3-back-end.onrender.com",
-  baseURL: "http://localhost:5000",
+  baseURL: "https://njs301x-asm-3-back-end.onrender.com",
+  // baseURL: "http://localhost:5000",
   headers: {
     "content-type": "application/json",
   },
@@ -15,6 +15,7 @@ const axiosClient = axios.create({
 });
 
 const isTokenExpired = (token) => {
+  if (!token) return true;
   try {
     const decoded = jwtDecode(token);
     return decoded.exp * 1000 < Date.now();
@@ -28,10 +29,13 @@ axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
   const token = localStorage.getItem("token");
 
-  if (token && isTokenExpired(token)) {
+  if (isTokenExpired(token)) {
     localStorage.removeItem("token");
-    alertify.set("notifier", "position", "bottom-left");
-    alertify.success("Phiên đăng nhập đã hết hạn.");
+    if (localStorage.getItem("id_user")) {
+      localStorage.removeItem("id_user");
+      alertify.set("notifier", "position", "bottom-left");
+      alertify.error("Vui lòng đăng nhập lại.");
+    }
   }
 
   if (token) {

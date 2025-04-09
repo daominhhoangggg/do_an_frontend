@@ -36,7 +36,6 @@ function Cart(props) {
     const fetchDataRedux = () => {
       if (!localStorage.getItem("id_user")) {
         setCart(listCart);
-
         getTotal(listCart);
       }
     };
@@ -60,7 +59,7 @@ function Cart(props) {
   //Khi người dùng đã đăng nhập
   useEffect(() => {
     const fetchData = async () => {
-      if (localStorage.getItem("id_user")) {
+      if (localStorage.getItem("id_user") && localStorage.getItem("token")) {
         const params = {
           idUser: localStorage.getItem("id_user"),
         };
@@ -69,9 +68,7 @@ function Cart(props) {
 
         const response = await CartAPI.getCarts(query);
 
-        console.log(response);
         setCart(response);
-
         getTotal(response);
       }
     };
