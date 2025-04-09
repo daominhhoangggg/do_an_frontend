@@ -54,6 +54,7 @@ function App() {
           <PrivateRoute path="/history" component={History} />
           <PrivateRoute path="/signup" component={Signup} />
           <PrivateRoute path="/new" component={NewProduct} />
+          <Route path="*" render={() => <Redirect to="/" />} />
         </Switch>
       </div>
     </div>

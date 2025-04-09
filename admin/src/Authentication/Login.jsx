@@ -2,18 +2,15 @@ import React, { useState, useContext } from "react";
 import alertify from "alertifyjs";
 import UserAPI from "../API/UserAPI";
 import { AuthContext } from "../Context/AuthContext";
-
 import "./Auth.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { user } = useContext(AuthContext);
-  const { loading, error, dispatch } = useContext(AuthContext);
+  const { user, loading, error, dispatch } = useContext(AuthContext);
 
   const handleSubmit = async () => {
-
     const fetchLogin = async () => {
       const query = "?" + `email=${email}&password=${password}`;
 
@@ -22,13 +19,9 @@ const Login = () => {
 
         localStorage.setItem("token", response.token);
 
-        // localStorage.setItem("refreshToken", response.refreshToken);
-
         dispatch({ type: "LOGIN_SUCCESS", payload: response.user });
 
         window.location.href = "/";
-
-
       } catch (error) {
         if (error.response.data.error === "email") {
           alertify.set("notifier", "position", "bottom-left");
@@ -39,7 +32,6 @@ const Login = () => {
           if (error.response.data.error === "password") {
             alertify.set("notifier", "position", "bottom-left");
             alertify.error(error.response.data.message);
-            console.log(error.response.data.message);
             dispatch({ type: "LOGIN_FAILURE", payload: "Wrong password." });
             return;
           }
@@ -51,7 +43,6 @@ const Login = () => {
   };
 
   return (
-
     <div className="page-breadcrumb">
       <div className="row">
         <div className="login">
@@ -92,7 +83,6 @@ const Login = () => {
         </div>
       </div>
     </div>
-
   );
 };
 

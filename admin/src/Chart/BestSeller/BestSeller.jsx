@@ -90,26 +90,8 @@ const BarChart = () => {
         <div className="row">
           <div className="col-7 align-self-center">
             <h4 className="page-title text-truncate text-dark font-weight-medium mb-1">
-              Basic Initialisation
+              Best Seller
             </h4>
-            <div className="d-flex align-items-center">
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb m-0 p-0">
-                  <li
-                    className="breadcrumb-item text-muted active"
-                    aria-current="page"
-                  >
-                    Home
-                  </li>
-                  <li
-                    className="breadcrumb-item text-muted"
-                    aria-current="page"
-                  >
-                    Best Seller
-                  </li>
-                </ol>
-              </nav>
-            </div>
           </div>
         </div>
       </div>

@@ -3,11 +3,12 @@ import { AuthContext } from "../Context/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import Logoicon from "../Image/logo-icon.png";
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 // import Logotext from "../Image/logo-text.png";
 // import Logolight from "../Image/logo-light-text.png";
 
 function Header(props) {
-  const { user } = useContext(AuthContext);
+  const { user, loading, error } = useContext(AuthContext);
   const { dispatch } = useContext(AuthContext);
 
   const handleLogout = async () => {

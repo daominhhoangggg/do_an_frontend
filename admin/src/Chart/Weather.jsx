@@ -71,7 +71,7 @@ function Weather(props) {
           <div className="col-12">
             <div className="card">
               <div className="card-body mt-3">
-                <h3 className="card-title">Biểu đồ nhiệt độ</h3>
+                <h3 className="card-title">Temperature</h3>
               </div>
               <div className="card-body pt-0">
                 <BarChart
@@ -90,7 +90,7 @@ function Weather(props) {
             </div>
             <div className="card">
               <div className="card-body mt-3">
-                <h3 className="card-title">Biểu đồ độ ẩm</h3>
+                <h3 className="card-title">Humidity</h3>
               </div>
               <div className="card-body pt-0">
                 <LineChart
@@ -99,12 +99,6 @@ function Weather(props) {
                   yLegend={"Độ ẩm (%)"} // Trục dọc
                 />
               </div>
-            </div>
-            <div className="card">
-              <div className="card-body mt-3">
-                <h3 className="card-title">Biểu đồ</h3>
-              </div>
-              <div className="card-body pt-0"></div>
             </div>
           </div>
         </div>
